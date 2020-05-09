@@ -1,4 +1,4 @@
-"# schoolManagement" 
+# "# schoolManagement" 
 
 1 - Add new py module to req.text file
 
@@ -10,4 +10,4 @@
 
 5 - use pip freeze > req.txt after add every python or django module
 
-
+6 - use commant pip install -r file_name.text to install all requirments
