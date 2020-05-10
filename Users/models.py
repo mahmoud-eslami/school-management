@@ -20,11 +20,14 @@ class userDoc(models.Model):
     address = models.CharField(max_length=250,null=False,blank=False)
     personalCode = models.IntegerField(null=True,blank=True)
     nationalCode = models.IntegerField(blank=False,null=True)
-    photo = models.ImageField(upload_to='uploads',blank=True)
+    father_nationalCode = models.IntegerField(blank=False,null=True)
+    userPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
+    nationalCardPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
     father_name = models.CharField(max_length=40,blank=False,null=True)
     mother_name = models.CharField(max_length=40,blank=False,null=True)
     father_pNum = models.CharField(max_length=40,blank=False,null=True)
     citizen_Num = models.CharField(max_length=40,blank=True,null=True)
+    zipCode = models.IntegerField(blank=False,null=True)
     #############################
     #citizens
     IRAN = '1'
