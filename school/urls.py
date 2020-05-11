@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #==============================================
     # this urls route you to Users app urls.py
-    path('api/users/' , include('Users.urls')),
+    path('Users/' , include('Users.urls')),
     #==============================================
     #==============================================
 

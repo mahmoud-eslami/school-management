@@ -58,9 +58,6 @@ class userProfile(models.Model):
     ASSISTANT = '2'
     TEACHER = '3'
     STUDENT = '4'
-    #citizens
-    IRAN = '1'
-    NO_IRAN = '0'
     #############################
     #############################
     #gender choices
