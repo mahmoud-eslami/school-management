@@ -15,6 +15,7 @@ class getAllUser(APIView):
             temp_doc = userDoc.objects.all()
             json_data = []
 
+            print(temp_profile)
 
             for item in temp_users:
 
