@@ -8,5 +8,3 @@ class News(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='author')
     news_pic = models.ImageField(upload_to='uploads',blank=True,null=True)
     release_date = models.DateTimeField()
-
-    

@@ -18,6 +18,8 @@ class getAllUser(APIView):
 
             for item in temp_users:
 
+                this_profile = userProfile.objects.get(user_id = 1)
+
                 json_data.append({
                     'id':item.id,
                     'username':item.username,
