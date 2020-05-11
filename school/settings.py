@@ -54,6 +54,7 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = 'Users.User'
 
+
 ROOT_URLCONF = 'school.urls'
 
 TEMPLATES = [
