@@ -16,9 +16,6 @@ class getAllUser(APIView):
             json_data = []
 
 
-
-
-
             for item in temp_users:
 
                 json_data.append({
