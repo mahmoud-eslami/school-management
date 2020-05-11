@@ -23,6 +23,8 @@ urlpatterns = [
     # this urls route you to Users app urls.py
     path('Users/' , include('Users.urls')),
     #==============================================
+    # this urls route you to Users app urls.py
+    path('News/' , include('News.urls')),
     #==============================================
 
 ]
