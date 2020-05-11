@@ -45,17 +45,24 @@ class deleteNews(APIView):
             return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Deleted Success"},status.HTTP_200_OK)
         except:
             return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
-"""
+
 class editNews(APIView):
 
     def post(self, request):
-        #try:
+        try:
             news_id = request.data['news_id']
+            title = request.data['title']
+            content = request.data['content']
+            release_date = datetime.now()
+            news_pic = request.FILES['news_pic']
 
+            News.objects.all().filter(id = news_id).update(title = title,content = content,release_date = release_date,news_pic = news_pic)
 
-        #except:
-            #pass
-"""
+            return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Updated"},status.HTTP_200_OK)
+
+        except:
+            return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+
 class allNews(APIView):
 
     def get(self, request):
