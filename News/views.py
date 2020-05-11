@@ -10,7 +10,7 @@ from datetime import datetime
 class addNews(APIView):
 
     def post(self, request):
-        #try:
+        try:
              title = request.data['title']
              content = request.data['content']
              authorId = request.data['authorId']
@@ -30,23 +30,31 @@ class addNews(APIView):
              new_news.save()
 
              return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Added Success"},status.HTTP_200_OK)
-        #except:
-             #return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+        except:
+             return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
 
-"""
+
 class deleteNews(APIView):
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
 
-class editPost(APIView):
     def post(self, request):
         try:
-            pass
+            news_id = request.data['news_id']
+
+            News.objects.all().filter(id = news_id).delete()
+
+            return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Deleted Success"},status.HTTP_200_OK)
         except:
-            pass
+            return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+"""
+class editNews(APIView):
+
+    def post(self, request):
+        #try:
+            news_id = request.data['news_id']
+
+
+        #except:
+            #pass
 """
 class allNews(APIView):
 
