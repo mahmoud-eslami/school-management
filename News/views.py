@@ -4,7 +4,50 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import *
+from Users.models import *
+from datetime import datetime
 
+class addNews(APIView):
+
+    def post(self, request):
+        #try:
+             title = request.data['title']
+             content = request.data['content']
+             authorId = request.data['authorId']
+             release_date = datetime.now()
+             news_pic = request.FILES['news_pic']
+
+             author = User.objects.get(id = authorId)
+             #make instance from news
+             new_news = News()
+
+             new_news.title = title
+             new_news.content = content
+             new_news.release_date = release_date
+             new_news.news_pic = news_pic
+             new_news.author = author
+
+             new_news.save()
+
+             return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Added Success"},status.HTTP_200_OK)
+        #except:
+             #return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+
+"""
+class deleteNews(APIView):
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class editPost(APIView):
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+"""
 class allNews(APIView):
 
     def get(self, request):

@@ -13,7 +13,10 @@ class userDocInLine(admin.StackedInline):
     model = userDoc
     can_delete = False
 
+# new annotaition use instead of admin.site.register
+############################
 @admin.register(User)
+############################
 class UserAdmin(BaseUserAdmin):
     field_set = (
         (None, {'fields': ('email', 'password')}),
