@@ -24,6 +24,16 @@ class userDoc(models.Model):
     #citizens
     IRAN = '1'
     NO_IRAN = '0'
+    #gender
+    MAN = '1'
+    WOMAN = '0'
+    #section
+    pre_one = '0'
+    one = '1'
+    two = '2'
+    three = '3'
+    four = '4'
+    five = '5'
     #############################
     #############################
     #citizens choices
@@ -31,8 +41,25 @@ class userDoc(models.Model):
         (IRAN,'اتباع ایرانی'),
         (NO_IRAN,'اتباع خارجی'),
     ]
+    #gender choices
+    gender_choices = [
+        (MAN, 'آقا'),
+        (WOMAN, 'خانوم'),
+    ]
+    # section choices
+    section_choices = [
+        (pre_one,'پیش دبستانی'),
+        (one,'اول ابتدایی'),
+        (two,'دوم ابتدایی'),
+        (three,'سوم ابتدایی'),
+        (four,'چهارم ابتدایی'),
+        (five,'پنجم ابتدایی'),
+    ]
     #############################
+
     citizen = models.CharField(max_length=40,default=IRAN,choices=citizen_choices)
+    gender = models.CharField(max_length=4,choices=gender_choices,default=MAN)
+    section = models.CharField(max_length=4,choices=section_choices,default=pre_one)
 
 
 
@@ -42,31 +69,20 @@ class userProfile(models.Model):
     uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
 
     #############################
-    #gender
-    MAN = '1'
-    WOMAN = '0'
     #role
     MODERATION = '1'
     ASSISTANT = '2'
     TEACHER = '3'
     STUDENT = '4'
-    #############################
-    #############################
-    #gender choices
-    gender_choices = [
-        (MAN, 'آقا'),
-        (WOMAN, 'خانوم'),
-    ]
     #role choices
     role_choices = [
         (MODERATION,'مدیر'),
         (ASSISTANT,'معاون'),
         (TEACHER,'معلم'),
         (STUDENT,'دانش آموز'),
-    ]
+    ]    
     #############################
 
-    gender = models.CharField(max_length=4,choices=gender_choices,default=MAN)
     role = models.CharField(max_length=4,choices=role_choices,default=STUDENT)
 
     #Magic Methods

@@ -18,6 +18,10 @@ from django.urls import path, include
 from rest_framework_simplejwt import views as jwt
 
 urlpatterns = [
+    # access to jet dashboard
+    #path('jet/',include('jet.urls','jet')),
+    #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    #==============================================
     path('admin/', admin.site.urls),
     #==============================================
     # this urls route you to Users app urls.py
