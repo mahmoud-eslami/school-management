@@ -6,6 +6,15 @@ from rest_framework import status
 from .models import *
 
 
+class deleteUser(APIView):
+
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+
 class getAllUser(APIView):
 
     def get(self, request):
@@ -14,12 +23,12 @@ class getAllUser(APIView):
 
             json_data = []
 
-
-
             for item in temp_users:
 
                 temp_profile = userProfile.objects.get(user_id = item.id)
                 temp_doc = userDoc.objects.get(user_id = item.id)
+
+                # TODO: add serializer for image Field
 
                 json_data.append({
                     'id':item.id,
@@ -27,6 +36,7 @@ class getAllUser(APIView):
                     'name':item.first_name,
                     'lname':item.last_name,
                     'email':item.email,
+                    'date_joined':item.date_joined,
                     'userProfile':[
                         {'uuid':temp_profile.uuid,
                         'gender':temp_profile.gender,
@@ -40,6 +50,8 @@ class getAllUser(APIView):
                         'personalCode':temp_doc.personalCode,
                         'nationalCode':temp_doc.nationalCode,
                         'nationalCardPhoto':str(temp_doc.nationalCardPhoto),
+                        'date_of_birth':temp_doc.date_of_birth,
+                        'place_of_birth':temp_doc.place_of_birth,
                         'father_name':temp_doc.father_name,
                         'father_nationalCode':temp_doc.father_nationalCode,
                         'father_pNum':temp_doc.father_pNum,

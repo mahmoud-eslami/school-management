@@ -18,6 +18,8 @@ class userDoc(models.Model):
     father_pNum = models.CharField(max_length=40,blank=False,null=True)
     citizen_Num = models.CharField(max_length=40,blank=True,null=True)
     zipCode = models.IntegerField(blank=False,null=True)
+    date_of_birth = models.DateTimeField(blank=False,null=True)
+    place_of_birth = models.CharField(max_length=40,blank=False,null=True)
     #############################
     #citizens
     IRAN = '1'
