@@ -8,6 +8,7 @@ from .models import *
 
 
 class deleteUser(APIView):
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             user_id = request.data['user_id']
@@ -18,6 +19,7 @@ class deleteUser(APIView):
 
 
 class getAllUser(APIView):
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_users = User.objects.all()

@@ -8,7 +8,7 @@ from Users.models import *
 from datetime import datetime
 
 class addNews(APIView):
-
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
              title = request.data['title']
@@ -35,7 +35,7 @@ class addNews(APIView):
 
 
 class deleteNews(APIView):
-
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             news_id = request.data['news_id']
@@ -47,7 +47,7 @@ class deleteNews(APIView):
             return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
 
 class editNews(APIView):
-
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             news_id = request.data['news_id']
@@ -64,7 +64,7 @@ class editNews(APIView):
             return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
 
 class allNews(APIView):
-
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_news = News.objects.all()
