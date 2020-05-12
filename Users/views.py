@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from  rest_framework.permissions import IsAuthenticated
@@ -9,9 +10,11 @@ from .models import *
 class deleteUser(APIView):
     def post(self, request):
         try:
-            pass
+            user_id = request.data['user_id']
+            User.objects.all().filter(id = user_id).delete()
+            return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Deleted Success"},status.HTTP_200_OK)
         except:
-            pass
+            return Response({"status_code":"500" ,"error":"Internal Server Error","data": "" ,"message":""},)
 
 
 class getAllUser(APIView):
@@ -30,4 +33,4 @@ class getAllUser(APIView):
                     'date_joined':item.date_joined,})
             return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
         except:
-            return Response({'error' : 'Internal Server Error'})
+            return Response({"status_code":"500" ,"error":"Internal Server Error","data": "" ,"message":""},)

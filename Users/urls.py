@@ -3,5 +3,5 @@ from  . import views
 
 urlpatterns = [
     path('get/all_user/',views.getAllUser.as_view(),name='getAllUser'),
-    path('delete_user/username/',views.deleteUser.as_view(),name='deleteUser'),
+    path('delete_user/id/',views.deleteUser.as_view(),name='deleteUser'),
 ]
