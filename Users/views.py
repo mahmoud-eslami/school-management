@@ -6,6 +6,53 @@ from  rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import *
 
+class registerUser(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class findUserById(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class findUserByUsername(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class editSpecificUser(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class editSpecificUserProfile(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class editSpecificUserDoc(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
 
 class deleteUser(APIView):
     permission_classes=(IsAuthenticated,)
@@ -25,7 +72,7 @@ class getAllUser(APIView):
             temp_users = User.objects.all()
             json_data = []
             for item in temp_users:
-                # TODO: add serializer for image Field
+                # TODO: add serializer for serialize data
                 json_data.append({
                     'id':item.id,
                     'username':item.username,
