@@ -7,12 +7,25 @@ from rest_framework import status
 from .models import *
 
 class registerUser(APIView):
-    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
-            pass
+            username = request.data['username']
+            email = request.data['email']
+            first_name = request.data['first_name']
+            last_name = request.data['last_name']
+            password = request.data['password']
+
+            new_user = User()
+            new_user.username = username
+            new_user.email = email
+            new_user.first_name = first_name
+            new_user.last_name = last_name
+            new_user.set_password(password)
+            new_user.save()
+
+            return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
         except:
-            pass
+            return Response({"status_code":"500" ,"error":"Internal Server Error","data": "" ,"message":""},)
 
 class findUserById(APIView):
     permission_classes=(IsAuthenticated,)
