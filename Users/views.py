@@ -40,12 +40,22 @@ class registerUser(APIView):
                 personal_code = request.data['personal_code']
             new_doc.personalCode = personal_code
             new_doc.nationalCode = request.data['national_code']
+            new_doc.home_pNum = request.data['home_phone_num']
+            new_doc.user_pNum = request.data['user_phone_num']
             new_doc.father_name = request.data['father_name']
             new_doc.father_nationalCode = request.data['father_national_code']
             new_doc.father_pNum = request.data['father_phone_num']
+            new_doc.father_jobName = request.data['father_job_name']
+            new_doc.father_jobAddress = request.data['father_job_address']
+            new_doc.father_job_pNum = request.data['father_job_phone_num']
             new_doc.userPhoto = request.data['user_photo']
             new_doc.nationalCardPhoto = request.data['national_card_photo']
             new_doc.mother_name = request.data['mother_name']
+            new_doc.mother_jobName = request.data['mother_job_name']
+            new_doc.mother_jobAddress = request.data['mother_job_address']
+            new_doc.mother_job_pNum = request.data['mother_job_phone_num']
+            new_doc.mother_nationalCode = request.data['mother_national_code']
+            new_doc.mother_pNum = request.data['mother_pNum']
             new_doc.citizen = request.data['citizen'] # 1 or 0
             citizen_num = request.data['citizen_num']
             new_doc.citizen_Num = citizen_num
@@ -66,6 +76,22 @@ class findUserById(APIView):
             pass
 
 class findUserByUsername(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class findUserProfileByUsername(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        try:
+            pass
+        except:
+            pass
+
+class findUserDocByUsername(APIView):
     permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
