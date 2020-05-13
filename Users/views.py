@@ -9,62 +9,42 @@ from .models import *
 class registerUser(APIView):
     def post(self, request):
         try:
-            # get user info
-            username = request.data['username']
-            email = request.data['email']
-            first_name = request.data['first_name']
-            last_name = request.data['last_name']
-            password = request.data['password']
-            # get user profile info
-            role = request.data['role'] # 1 to 4
-            # get user doc info
-            gender = request.data['gender'] # 1 or 0
-            section = request.data['section'] # 1 to 5
-            address = request.data['address']
-            personal_code = request.data['personal_code']
-            national_code = request.data['national_code']
-            father_name = request.data['father_name']
-            father_national_code = request.data['father_national_code']
-            father_phone_num = request.data['father_phone_num']
-            user_photo = request.data['user_photo']
-            national_card_photo = request.data['national_card_photo']
-            mother_name = request.data['mother_name']
-            citizen = request.data['citizen'] # 1 or 0
-            citizen_num = request.data['citizen_num']
-            zipcode = request.data['zipcode']
-            date_birth = request.data['date_birth']
-            place_birth = request.data['place_birth']
             # new user created
             new_user = User()
-            new_user.username = username
-            new_user.email = email
-            new_user.first_name = first_name
-            new_user.last_name = last_name
-            new_user.set_password(password)
-            new_user.save()
             # new profile created for new user
             new_profile = userProfile()
-            new_profile.user = new_user
-            new_profile.role = role
-            new_profile.save()
             # new doc created for new user
             new_doc = userDoc()
+            # get user info
+            new_user.username = request.data['username']
+            new_user.email = request.data['email']
+            new_user.first_name = request.data['first_name']
+            new_user.last_name = request.data['last_name']
+            password = request.data['password']
+            new_user.set_password(password)
+            new_user.save()
+            # get user profile info
+            new_profile.user = new_user
+            new_profile.role = request.data['role'] # 1 to 4
+            new_profile.save()
+            # get user doc info
             new_doc.user = new_user
-            new_doc.gender = gender
-            new_doc.section = section
-            new_doc.address = address
-            new_doc.personalCode = personal_code
-            new_doc.nationalCode = national_code
-            new_doc.father_name = father_name
-            new_doc.father_nationalCode = father_national_code
-            new_doc.userPhoto = user_photo
-            new_doc.nationalCardPhoto = national_card_photo
-            new_doc.mother_name = mother_name
-            new_doc.citizen = citizen
-            new_doc.citizen_Num = citizen_num
-            new_doc.zipCode = zipcode
-            new_doc.date_of_birth = date_birth
-            new_doc.place_of_birth = place_birth
+            new_doc.gender = request.data['gender'] # 1 or 0
+            new_doc.section = request.data['section'] # 1 to 5
+            new_doc.address = request.data['address']
+            new_doc.personalCode = request.data['personal_code']
+            new_doc.nationalCode = request.data['national_code']
+            new_doc.father_name = request.data['father_name']
+            new_doc.father_nationalCode = request.data['father_national_code']
+            new_doc.father_pNum = request.data['father_phone_num']
+            new_doc.userPhoto = request.data['user_photo']
+            new_doc.nationalCardPhoto = request.data['national_card_photo']
+            new_doc.mother_name = request.data['mother_name']
+            new_doc.citizen = request.data['citizen'] # 1 or 0
+            new_doc.citizen_Num = request.data['citizen_num']
+            new_doc.zipCode = request.data['zipcode']
+            new_doc.date_of_birth = request.data['date_birth']
+            new_doc.place_of_birth = request.data['place_birth']
             new_doc.save()
             return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
         except:
@@ -122,7 +102,7 @@ class deleteUser(APIView):
 
 
 class getAllUser(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_users = User.objects.all()
