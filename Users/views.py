@@ -8,7 +8,7 @@ from .models import *
 
 class registerUser(APIView):
     def post(self, request):
-        try:
+        #try:
             # new user created
             new_user = User()
             # new profile created for new user
@@ -25,14 +25,20 @@ class registerUser(APIView):
             new_user.save()
             # get user profile info
             new_profile.user = new_user
-            new_profile.role = request.data['role'] # 1 to 4
+            role = request.data['role'] # 1 to 4
+            new_profile.role = role
             new_profile.save()
             # get user doc info
             new_doc.user = new_user
             new_doc.gender = request.data['gender'] # 1 or 0
             new_doc.section = request.data['section'] # 1 to 5
             new_doc.address = request.data['address']
-            new_doc.personalCode = request.data['personal_code']
+            # check user role
+            if role == '4':
+                personal_code = ''
+            else:
+                personal_code = request.data['personal_code']
+            new_doc.personalCode = personal_code
             new_doc.nationalCode = request.data['national_code']
             new_doc.father_name = request.data['father_name']
             new_doc.father_nationalCode = request.data['father_national_code']
@@ -41,14 +47,15 @@ class registerUser(APIView):
             new_doc.nationalCardPhoto = request.data['national_card_photo']
             new_doc.mother_name = request.data['mother_name']
             new_doc.citizen = request.data['citizen'] # 1 or 0
-            new_doc.citizen_Num = request.data['citizen_num']
+            citizen_num = request.data['citizen_num']
+            new_doc.citizen_Num = citizen_num
             new_doc.zipCode = request.data['zipcode']
             new_doc.date_of_birth = request.data['date_birth']
             new_doc.place_of_birth = request.data['place_birth']
             new_doc.save()
             return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
-        except:
-            return Response({"status_code":"500" ,"error":"Wrong Field Error","data": "" ,"message":""},)
+        #except:
+            #return Response({"status_code":"500" ,"error":"Field Error","data": "" ,"message":""},)
 
 class findUserById(APIView):
     permission_classes=(IsAuthenticated,)

@@ -7,17 +7,25 @@ from django.conf import settings
 
 class userDoc(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doc')
-    address = models.CharField(max_length=250,null=False,blank=False)
-    personalCode = models.IntegerField(null=True,blank=True)
-    nationalCode = models.IntegerField(blank=False,null=True)
-    father_nationalCode = models.IntegerField(blank=False,null=True)
     userPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
     nationalCardPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
+    user_pNum = models.CharField(max_length=40,blank=False,null=True)
+    home_pNum = models.CharField(max_length=40,blank=False,null=True)
+    address = models.CharField(max_length=250,null=True,blank=False)
+    zipCode = models.CharField(max_length=20,blank=False,null=True)
+    personalCode = models.CharField(max_length=20,null=True,blank=True)
+    nationalCode = models.CharField(max_length=20,blank=False,null=True)
+    father_nationalCode = models.CharField(max_length=20,blank=False,null=True)
     father_name = models.CharField(max_length=40,blank=False,null=True)
-    mother_name = models.CharField(max_length=40,blank=False,null=True)
     father_pNum = models.CharField(max_length=40,blank=False,null=True)
+    father_jobAddress = models.CharField(max_length=250,null=True,blank=False)
+    father_job_pNum = models.CharField(max_length=40,blank=False,null=True)
+    mother_nationalCode = models.CharField(max_length=20,blank=False,null=True)
+    mother_name = models.CharField(max_length=40,blank=False,null=True)
+    mother_pNum = models.CharField(max_length=40,blank=False,null=True)
+    mother_jobAddress = models.CharField(max_length=250,null=True,blank=False)
+    mother_job_pNum = models.CharField(max_length=40,blank=False,null=True)
     citizen_Num = models.CharField(max_length=40,blank=True,null=True)
-    zipCode = models.IntegerField(blank=False,null=True)
     date_of_birth = models.DateTimeField(blank=False,null=True)
     place_of_birth = models.CharField(max_length=40,blank=False,null=True)
     #############################
@@ -57,9 +65,9 @@ class userDoc(models.Model):
     ]
     #############################
 
-    citizen = models.IntegerField(default=IRAN,choices=citizen_choices)
-    gender = models.IntegerField(choices=gender_choices,default=MAN)
-    section = models.IntegerField(choices=section_choices,default=pre_one)
+    citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
+    gender = models.CharField(max_length=1,choices=gender_choices,default=MAN)
+    section = models.CharField(max_length=1,choices=section_choices,default=pre_one)
 
 
 
@@ -83,7 +91,7 @@ class userProfile(models.Model):
     ]
     #############################
 
-    role = models.IntegerField(choices=role_choices,default=STUDENT)
+    role = models.CharField(max_length=1,choices=role_choices,default=STUDENT)
 
     #Magic Methods
     def __str__(self):
