@@ -57,9 +57,9 @@ class userDoc(models.Model):
     ]
     #############################
 
-    citizen = models.CharField(max_length=40,default=IRAN,choices=citizen_choices)
-    gender = models.CharField(max_length=4,choices=gender_choices,default=MAN)
-    section = models.CharField(max_length=4,choices=section_choices,default=pre_one)
+    citizen = models.IntegerField(default=IRAN,choices=citizen_choices)
+    gender = models.IntegerField(choices=gender_choices,default=MAN)
+    section = models.IntegerField(choices=section_choices,default=pre_one)
 
 
 
@@ -80,10 +80,10 @@ class userProfile(models.Model):
         (ASSISTANT,'معاون'),
         (TEACHER,'معلم'),
         (STUDENT,'دانش آموز'),
-    ]    
+    ]
     #############################
 
-    role = models.CharField(max_length=4,choices=role_choices,default=STUDENT)
+    role = models.IntegerField(choices=role_choices,default=STUDENT)
 
     #Magic Methods
     def __str__(self):
