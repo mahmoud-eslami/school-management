@@ -5,10 +5,12 @@ from rest_framework.response import Response
 from  rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import *
+import traceback
+from . import serializers
 
 class registerUser(APIView):
     def post(self, request):
-        #try:
+        try:
             # new user created
             new_user = User()
             # new profile created for new user
@@ -57,17 +59,32 @@ class registerUser(APIView):
             new_doc.mother_nationalCode = request.data['mother_national_code']
             new_doc.mother_pNum = request.data['mother_pNum']
             new_doc.citizen = request.data['citizen'] # 1 or 0
-            citizen_num = request.data['citizen_num']
-            new_doc.citizen_Num = citizen_num
+            new_doc.citizen_Num = request.data['citizen_num']
             new_doc.zipCode = request.data['zipcode']
             new_doc.date_of_birth = request.data['date_birth']
             new_doc.place_of_birth = request.data['place_birth']
             new_doc.save()
             return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
-        #except:
-            #return Response({"status_code":"500" ,"error":"Field Error","data": "" ,"message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
-class findUserById(APIView):
+class findUser(APIView):
+    #permission_classes=(IsAuthenticated,)
+    def get(self, request):
+        try:
+            temp_username = request.GET['username']
+            temp_user = User.objects.get(username = temp_username)
+            serialized_data = serializers.User(temp_user)
+            json_data = serialized_data.data
+            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
+
+class findUserProfile(APIView):
     #permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
@@ -75,23 +92,7 @@ class findUserById(APIView):
         except:
             pass
 
-class findUserByUsername(APIView):
-    #permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
-
-class findUserProfileByUsername(APIView):
-    #permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
-
-class findUserDocByUsername(APIView):
+class findUserDoc(APIView):
     #permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
@@ -130,8 +131,10 @@ class deleteUser(APIView):
             user_id = request.data['user_id']
             User.objects.all().filter(id = user_id).delete()
             return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Deleted Success"},status.HTTP_200_OK)
-        except:
-            return Response({"status_code":"500" ,"error":"Internal Server Error","data": "" ,"message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
 
 class getAllUser(APIView):
@@ -139,16 +142,10 @@ class getAllUser(APIView):
     def get(self, request):
         try:
             temp_users = User.objects.all()
-            json_data = []
-            for item in temp_users:
-                # TODO: add serializer for serialize data
-                json_data.append({
-                    'id':item.id,
-                    'username':item.username,
-                    'name':item.first_name,
-                    'lname':item.last_name,
-                    'email':item.email,
-                    'date_joined':item.date_joined,})
+            serilized_data = serializers.User(temp_users, many=True)
+            json_data = serilized_data.data
             return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
-        except:
-            return Response({"status_code":"500" ,"error":"Internal Server Error","data": "" ,"message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error": message,"data": "" ,"message":""},)

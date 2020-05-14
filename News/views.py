@@ -44,8 +44,17 @@ class deleteNews(APIView):
     #permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
-            news_id = request.data['news_id']
-            News.objects.all().filter(id = news_id).delete()
+            serializer = serializers.deleteNewsSerializer(data=request.data)
+            if serializer.is_valid():
+                news_id = serializer.data.get('news_id')
+                if News.objects.all().filter(id = news_id).exists():
+                    News.objects.all().filter(id = news_id).delete()
+                else :
+                    return Response({"status_code":"500" , "error": "object isn,t exists","data":"","message":""},)
+            else:
+                message = serializer.errors
+                return Response({"status_code":"400" , "error":message,"data":"","message":""},)
+
             return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Deleted Success"},status.HTTP_200_OK)
         except:
             trace_back = traceback.format_exc()
