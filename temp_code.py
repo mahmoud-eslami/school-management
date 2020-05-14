@@ -72,3 +72,22 @@
                     'contact':item.content,
                     'release_date':item.release_date,
                 }) """
+
+
+                    """        news_id = request.data['news_id']
+                            title = request.data['title']
+                            content = request.data['content']
+                            release_date = datetime.now()
+                            news_pic = request.FILES['news_pic']
+
+                            News.objects.all().filter(id = news_id).update(title = title,content = content,release_date = release_date,news_pic = news_pic)
+                """
+
+"""
+                            temp_news = News.objects.get(id = news_id)
+                            temp_news.title = news_title
+                            temp_news.content = news_content
+                            temp_news.pic = news_pic
+                            temp_news.release_date = news_release_data
+                            temp_news.save()
+"""

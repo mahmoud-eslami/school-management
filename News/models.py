@@ -7,5 +7,5 @@ class News(models.Model):
     title = models.CharField(max_length=20,blank=False,null=True)
     content = models.CharField(max_length=200,blank=False,null=True)
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='author')
-    news_pic = models.ImageField(upload_to='uploads',blank=True,null=True)
+    pic = models.ImageField(upload_to='uploads',blank=True,null=True)
     release_date = models.DateTimeField()
