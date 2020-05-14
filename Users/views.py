@@ -9,6 +9,7 @@ import traceback
 from . import serializers
 
 class registerUser(APIView):
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             # new user created
@@ -71,7 +72,7 @@ class registerUser(APIView):
             return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
 class findUser(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_username = request.GET['username']
@@ -85,7 +86,7 @@ class findUser(APIView):
             return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
 class findUserProfile(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             pass
@@ -93,7 +94,7 @@ class findUserProfile(APIView):
             pass
 
 class findUserDoc(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             pass
@@ -101,7 +102,7 @@ class findUserDoc(APIView):
             pass
 
 class editSpecificUser(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             pass
@@ -109,7 +110,7 @@ class editSpecificUser(APIView):
             pass
 
 class editSpecificUserProfile(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             pass
@@ -117,7 +118,7 @@ class editSpecificUserProfile(APIView):
             pass
 
 class editSpecificUserDoc(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             pass
@@ -125,7 +126,7 @@ class editSpecificUserDoc(APIView):
             pass
 
 class deleteUser(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             user_id = request.data['user_id']
@@ -138,7 +139,7 @@ class deleteUser(APIView):
 
 
 class getAllUser(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_users = User.objects.all()

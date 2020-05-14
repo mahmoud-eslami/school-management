@@ -11,7 +11,7 @@ import traceback
 
 
 class addNews(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
              serilized_data = serializers.addNewsSerializer(data=request.data)
@@ -41,7 +41,7 @@ class addNews(APIView):
 
 
 class deleteNews(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             serializer = serializers.deleteNewsSerializer(data=request.data)
@@ -63,7 +63,7 @@ class deleteNews(APIView):
 
 
 class editNews(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
             serializer = serializers.editNewsSerializer(data=request.data)
@@ -94,7 +94,7 @@ class editNews(APIView):
 
 
 class allNews(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
             temp_news = News.objects.all()
