@@ -19,4 +19,5 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('usersApi/' , include('Users.urls'))
+    #path('accounts/', include('django.contrib.auth.usrls'))   for login in the site
 ]
