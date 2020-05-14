@@ -91,3 +91,5 @@
                             temp_news.release_date = news_release_data
                             temp_news.save()
 """
+            """    News.objects.all().filter(id = news_id).update(title = news_title
+                ,content = news_content,release_date = news_release_data,pic = news_pic) """
