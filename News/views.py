@@ -24,7 +24,7 @@ class addNews(APIView):
                  news_author = User.objects.get(id = news_author_id)
              else:
                  message = serilized_data.errors
-                 return Response({"status_code":"400" , "error":"message","data":"","message":""},)
+                 return Response({"status_code":"400" , "error":message,"data":"","message":""},)
              #make instance from news
              new_news = News()
              new_news.title = news_title
