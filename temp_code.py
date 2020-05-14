@@ -59,3 +59,16 @@
                         new_doc.place_of_birth = place_birth
                         new_doc.save()
                         """
+
+
+        """    json_data = []
+
+            for item in temp_news:
+                json_data.append({
+                    'auther_id':item.author_id,
+                    'auther_username':item.author.username,
+                    'post_id':item.id,
+                    'title':item.title,
+                    'contact':item.content,
+                    'release_date':item.release_date,
+                }) """

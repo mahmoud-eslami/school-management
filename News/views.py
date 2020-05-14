@@ -6,6 +6,7 @@ from rest_framework import status
 from .models import *
 from Users.models import *
 from datetime import datetime
+from . import serializers
 
 class addNews(APIView):
     permission_classes=(IsAuthenticated,)
@@ -16,22 +17,18 @@ class addNews(APIView):
              authorId = request.data['authorId']
              release_date = datetime.now()
              news_pic = request.FILES['news_pic']
-
              author = User.objects.get(id = authorId)
              #make instance from news
              new_news = News()
-
              new_news.title = title
              new_news.content = content
              new_news.release_date = release_date
              new_news.news_pic = news_pic
              new_news.author = author
-
              new_news.save()
-
              return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Added Success"},status.HTTP_200_OK)
-        except:
-             return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+        except Exception as e:
+             return Response({"status_code":"500" , "error": str(e),"data":"","message":""},)
 
 
 class deleteNews(APIView):
@@ -68,19 +65,8 @@ class allNews(APIView):
     def get(self, request):
         try:
             temp_news = News.objects.all()
-
-            json_data = []
-
-            for item in temp_news:
-                json_data.append({
-                    'auther_id':item.author_id,
-                    'auther_username':item.author.username,
-                    'post_id':item.id,
-                    'title':item.title,
-                    'contact':item.content,
-                    'release_date':item.release_date,
-                })
-
+            serilized_data = serializers.allNewsSerializer(temp_news, many=True)
+            json_data = serilized_data.data
             return Response({"status_code":"200" , "error":"", "data": json_data , "message":"" },status.HTTP_200_OK)
-        except:
-            return Response({"status_code":"500" , "error":"Internal Server Error","data":"","message":""},)
+        except Exception as e:
+            return Response({"status_code":"500" , "error":str(e),"data":"","message":""},)
