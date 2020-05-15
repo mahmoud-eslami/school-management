@@ -19,12 +19,16 @@ class registerUser(APIView):
             # new doc created for new user
             new_doc = userDoc()
             # get user info
+            #################################
             new_user.username = request.data['username']
+            #################################
             new_user.email = request.data['email']
             new_user.first_name = request.data['first_name']
             new_user.last_name = request.data['last_name']
             password = request.data['password']
+            #################################
             new_user.set_password(password)
+            #################################
             new_user.save()
             # get user profile info
             new_profile.user = new_user
