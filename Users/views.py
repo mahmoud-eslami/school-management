@@ -87,19 +87,31 @@ class findUser(APIView):
 
 class findUserProfile(APIView):
     permission_classes=(IsAuthenticated,)
-    def post(self, request):
+    def get(self, request):
         try:
-            pass
-        except:
-            pass
+            temp_id = request.GET['user_id']
+            temp_user_profile = userProfile.objects.get(user_id = temp_id)
+            serialized_data = serializers.UserProfile(temp_user_profile)
+            json_data = serialized_data.data
+            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
 class findUserDoc(APIView):
     permission_classes=(IsAuthenticated,)
-    def post(self, request):
+    def get(self, request):
         try:
-            pass
-        except:
-            pass
+            temp_id = request.GET['user_id']
+            temp_user_doc = userDoc.objects.get(user_id = temp_id)
+            serialized_data = serializers.UserDoc(temp_user_doc)
+            json_data = serialized_data.data
+            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
 
 class editSpecificUser(APIView):
     permission_classes=(IsAuthenticated,)
