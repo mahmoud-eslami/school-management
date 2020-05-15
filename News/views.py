@@ -10,7 +10,7 @@ from . import serializers
 import traceback
 
 class NewsApi(APIView):
-
+    permission_classes = (IsAuthenticated,)
     ########################## get method for recieve seprate news
     def get(self , request):
         try:
