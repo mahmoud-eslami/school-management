@@ -6,4 +6,5 @@ urlpatterns = [
     path('add_news/',views.addNews.as_view(),name='addNews'),
     path('delete_news/',views.deleteNews.as_view(),name='deleteNews'),
     path('edit_news/',views.editNews.as_view(),name='editNews'),
+    path('api/news/',views.NewsApi.as_view(),name='newsApi')
 ]

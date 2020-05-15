@@ -9,6 +9,56 @@ from datetime import datetime
 from . import serializers
 import traceback
 
+class NewsApi(APIView):
+
+    ########################## get method for recieve seprate news
+    def get(self , request):
+        try:
+            id = request.GET['id']
+            if News.objects.all().filter(id = id).exists():
+                news = News.objects.get(id = id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist","data":"","message":""},)
+            serializer = serializers.NewsSerializer(news)
+            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+        except Exception as e:
+             trace_back = traceback.format_exc()
+             message = str(e) + ' ' + str(trace_back)
+             return Response({"status_code":"500" , "error": message,"data":"","message":""},)
+
+    ########################## post method for recieve seprate news
+    def post(self , request):
+        pass
+
+    ########################## delete method for delete seprate news
+    def delete(self , request):
+        try:
+            id = request.GET['id']
+            if News.objects.all().filter(id = id).exists():
+                news = News.objects.get(id = id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist","data":"","message":""},)
+            news.delete()
+            return Response({"status_code":"200" , "error":"", "data": "" , "message":"News Deleted Success"},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
+    ########################## put method for update seprate news
+    def put(self ,request):
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
 
 class addNews(APIView):
     permission_classes=(IsAuthenticated,)

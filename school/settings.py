@@ -27,7 +27,7 @@ SECRET_KEY = 'oy7xjf%3-uqrt5jcrpytc8lj&hi09luq1d5+mn)7s+1(fz#^bj'
 DEBUG = True
 
 #Allowed Host
-ALLOWED_HOSTS = ['localhost','051c5408.ngrok.io','03881909.ngrok.io','6e1cd20c.ngrok.io']
+ALLOWED_HOSTS = ['localhost','051c5408.ngrok.io','03881909.ngrok.io','6e1cd20c.ngrok.io','c5dae55e.ngrok.io']
 
 #simpleJWT settings
 SIMPLE_JWT = {
