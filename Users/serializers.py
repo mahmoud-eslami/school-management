@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+class FindIdSerilizer(serializers.Serializer):
+    user_id = serializers.CharField(max_length=5)
+
 class User(serializers.Serializer):
     id = serializers.CharField(max_length=5)
     username = serializers.CharField(max_length=5)

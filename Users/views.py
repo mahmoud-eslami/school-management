@@ -75,8 +75,8 @@ class findUser(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self, request):
         try:
-            temp_username = request.GET['username']
-            temp_user = User.objects.get(username = temp_username)
+            temp_id = request.GET['user_id']
+            temp_user = User.objects.get(id = temp_id)
             serialized_data = serializers.User(temp_user)
             json_data = serialized_data.data
             return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
