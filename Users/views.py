@@ -30,14 +30,14 @@ class ImageApi(APIView):
     def post(self , request):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
-
+            user_id = request.data['user_id']
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": "","data":"","message":"Image Uploaded Success"},)
+                return Response({"status_code":"200" , "error": "","data": str(serializer.instance.image) ,"message":"Image Uploaded Success"},)
             else:
                 message = serializer.errors
                 return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
-        except:
+        except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
             return Response({"status_code":"500" , "error": message,"data":"","message":""},)
