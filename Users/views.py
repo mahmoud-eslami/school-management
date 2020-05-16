@@ -137,23 +137,23 @@ class registerUser(APIView):
             if serializer.is_valid():
                 new_user = User()
 
-                new_user.username = serializer.instance.nationalCode
-                new_user.first_name = serializer.instance.nationalCode
-                new_user.last_name = serializer.instance.nationalCode
-                new_user.email = serializer.instance.nationalCode
-                new_user.set_password(serializer.instance.nationalCode)
+                new_user.username = serializer.data.get('nationalCode')
+                new_user.first_name = serializer.data.get('first_name')
+                new_user.last_name = serializer.data.get('last_name')
+                new_user.email = serializer.data.get('email')
+                new_user.set_password(serializer.data.get('nationalCode'))
                 new_user.save()
 
-                new_userDoc = userDoc(user_id = new_user.id,religon=serializer.instance.religon,userPhoto=serializer.instance.userPhoto,
-                userNationalCardPhoto=serializer.instance.userNationalCardPhoto,userIdCardPhoto=serializer.instance.userIdCardPhoto,
-                user_pNum=serializer.instance.user_pNum,home_pNum=serializer.instance.home_pNum,address=serializer.instance.address,
-                zipcode=serializer.instance.zipCode,personalCode=serializer.instance.personalCode,nationalCode=serializer.instance.nationalCode,
-                father_nationalCode=serializer.instance.father_nationalCode,father_name=serializer.instance.father_name,father_pNum=serializer.instance.father_pNum,
-                father_jobName=serializer.instance.father_jobName,father_jobAddress=serializer.instance.father_jobAddress,father_job_pNum=serializer.instance.father_job_pNum,
-                mother_nationalCode=serializer.instance.mother_nationalCode,mother_name=serializer.instance.mother_name,mother_pNum=serializer.instance.mother_pNum,
-                mother_jobName=serializer.instance.mother_jobName,mother_jobAddress=serializer.instance.mother_jobAddress,mother_job_pNum=serializer.instance.mother_job_pNum,
-                citizen_Num=serializer.instance.citizen_Num,date_of_birth=serializer.instance.date_of_birth,place_of_birth=serializer.instance.place_of_birth,role=serializer.instance.role,
-                citizen=serializer.instance.citizen,gender=serializer.instance.gender,section=serializer.instance.section)
+                new_userDoc = userDoc(user_id = new_user.id,religon=serializer.data.get('religon'),userPhoto=serializer.data.get('userPhoto'),
+                userNationalCardPhoto=serializer.data.get('userNationalCardPhoto'),userIdCardPhoto=serializer.data.get('userIdCardPhoto'),
+                user_pNum=serializer.data.get('user_pNum'),home_pNum=serializer.data.get('home_pNum'),address=serializer.data.get('address'),
+                zipCode=serializer.data.get('zipCode'),personalCode=serializer.data.get('personalCode'),nationalCode=serializer.data.get('nationalCode'),
+                father_nationalCode=serializer.data.get('father_nationalCode'),father_name=serializer.data.get('father_name'),father_pNum=serializer.data.get('father_pNum'),
+                father_jobName=serializer.data.get('father_jobName'),father_jobAddress=serializer.data.get('father_jobAddress'),father_job_pNum=serializer.data.get('father_job_pNum'),
+                mother_nationalCode=serializer.data.get('mother_nationalCode'),mother_name=serializer.data.get('mother_name'),mother_pNum=serializer.data.get('mother_pNum'),
+                mother_jobName=serializer.data.get('mother_jobName'),mother_jobAddress=serializer.data.get('mother_jobAddress'),mother_job_pNum=serializer.data.get('mother_job_pNum'),
+                citizen_Num=serializer.data.get('citizen_Num'),date_of_birth=serializer.data.get('date_of_birth'),place_of_birth=serializer.data.get('place_of_birth'),role=serializer.data.get('role'),
+                citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
                 new_userDoc.save()
 
                 return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
