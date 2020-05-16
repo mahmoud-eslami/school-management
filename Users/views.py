@@ -147,9 +147,13 @@ class registerUser(APIView):
                 new_userDoc = userDoc(user_id = new_user.id,religon=serializer.instance.religon,userPhoto=serializer.instance.userPhoto,
                 userNationalCardPhoto=serializer.instance.userNationalCardPhoto,userIdCardPhoto=serializer.instance.userIdCardPhoto,
                 user_pNum=serializer.instance.user_pNum,home_pNum=serializer.instance.home_pNum,address=serializer.instance.address,
-                zipcode=,personalCode=,nationalCode=,father_nationalCode=,father_name=,father_pNum=,father_jobName=,father_jobName=,
-                father_job_pNum=,mother_nationalCode=,mother_name=,mother_pNum=,mother_jobName=,mother_jobAddress=,mother_job_pNum=,
-                citizen_Num=,date_of_birth=,place_of_birth=,role=,citizen=,gender=,section=)
+                zipcode=serializer.instance.zipCode,personalCode=serializer.instance.personalCode,nationalCode=serializer.instance.nationalCode,
+                father_nationalCode=serializer.instance.father_nationalCode,father_name=serializer.instance.father_name,father_pNum=serializer.instance.father_pNum,
+                father_jobName=serializer.instance.father_jobName,father_jobAddress=serializer.instance.father_jobAddress,father_job_pNum=serializer.instance.father_job_pNum,
+                mother_nationalCode=serializer.instance.mother_nationalCode,mother_name=serializer.instance.mother_name,mother_pNum=serializer.instance.mother_pNum,
+                mother_jobName=serializer.instance.mother_jobName,mother_jobAddress=serializer.instance.mother_jobAddress,mother_job_pNum=serializer.instance.mother_job_pNum,
+                citizen_Num=serializer.instance.citizen_Num,date_of_birth=serializer.instance.date_of_birth,place_of_birth=serializer.instance.place_of_birth,role=serializer.instance.role,
+                citizen=serializer.instance.citizen,gender=serializer.instance.gender,section=serializer.instance.section)
                 new_userDoc.save()
 
                 return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
