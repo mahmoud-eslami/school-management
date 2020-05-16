@@ -10,7 +10,7 @@ from . import serializers
 
 
 class ImageApi(APIView):
-    permission_classes=(IsAuthenticated,)
+    #permission_classes=(IsAuthenticated,)
     #################################### get method for find specific user images
     def get(self , request):
         try:

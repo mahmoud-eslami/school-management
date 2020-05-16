@@ -3,7 +3,7 @@ from .models import *
 
 class ImageSerilizer(serializers.Serializer):
     user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
-    image = serializers.ImageField(max_length=None, allow_empty_file=False,)
+    image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True)
 
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
