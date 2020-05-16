@@ -87,7 +87,7 @@ class UserApi(APIView):
                 User.objects.get(id = id).delete()
                 return Response({"status_code":"200" , "error": "","data":"","message":"User Deleted Success"},)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)    
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -95,12 +95,39 @@ class UserApi(APIView):
 
 class UserDocApi(APIView):
     permission_classes=(IsAuthenticated,)
+    ############################# method for get specific user doc
     def get(self ,request):
-        pass
+        try:
+            user_id = request.GET['user_id']
+            if userDoc.objects.all().filter(user_id = user_id).exists():
+                temp_userDoc = userDoc.objects.get(user_id = user_id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+            serializer = serializers.UserDocSerializer(temp_userDoc)
+            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
+    ############################### method for edit specific user doc
     def put(self , request):
-        pass
-    def delete(self , request):
-        pass
+        try:
+            user_id = request.GET['user_id']
+            if userDoc.objects.all().filter(user_id = user_id).exists():
+                temp_userDoc = userDoc.objects.get(user_id = user_id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+            serializer = serializers.UserDocSerializer(temp_userDoc, request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"status_code":"200" , "error": "","data":"","message":"User Updated Success"},)
+            else:
+                message = serializer.errors
+                return Response({"status_code":"400" , "error": "","data":message,"message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
 
 class registerUser(APIView):
     permission_classes=(IsAuthenticated,)
