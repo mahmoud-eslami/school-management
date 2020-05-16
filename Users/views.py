@@ -133,64 +133,29 @@ class registerUser(APIView):
     permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
-            # new user created
-            new_user = User()
-            # new profile created for new user
-            new_profile = userProfile()
-            # new doc created for new user
-            new_doc = userDoc()
-            # get user info
-            #################################
-            new_user.username = request.data['username']
-            #################################
-            new_user.email = request.data['email']
-            new_user.first_name = request.data['first_name']
-            new_user.last_name = request.data['last_name']
-            password = request.data['password']
-            #################################
-            new_user.set_password(password)
-            #################################
-            new_user.save()
-            # get user profile info
-            new_profile.user = new_user
-            role = request.data['role'] # 1 to 4
-            new_profile.role = role
-            new_profile.save()
-            # get user doc info
-            new_doc.user = new_user
-            new_doc.gender = request.data['gender'] # 1 or 0
-            new_doc.section = request.data['section'] # 1 to 5
-            new_doc.address = request.data['address']
-            # check user role
-            if role == '4':
-                personal_code = ''
+            serializer = serializers.UserRegisterSerializer(data = request.data)
+            if serializer.is_valid():
+                new_user = User()
+
+                new_user.username = serializer.instance.nationalCode
+                new_user.first_name = serializer.instance.nationalCode
+                new_user.last_name = serializer.instance.nationalCode
+                new_user.email = serializer.instance.nationalCode
+                new_user.set_password(serializer.instance.nationalCode)
+                new_user.save()
+
+                new_userDoc = userDoc(user_id = new_user.id,religon=serializer.instance.religon,userPhoto=serializer.instance.userPhoto,
+                userNationalCardPhoto=serializer.instance.userNationalCardPhoto,userIdCardPhoto=serializer.instance.userIdCardPhoto,
+                user_pNum=serializer.instance.user_pNum,home_pNum=serializer.instance.home_pNum,address=serializer.instance.address,
+                zipcode=,personalCode=,nationalCode=,father_nationalCode=,father_name=,father_pNum=,father_jobName=,father_jobName=,
+                father_job_pNum=,mother_nationalCode=,mother_name=,mother_pNum=,mother_jobName=,mother_jobAddress=,mother_job_pNum=,
+                citizen_Num=,date_of_birth=,place_of_birth=,role=,citizen=,gender=,section=)
+                new_userDoc.save()
+
+                return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
             else:
-                personal_code = request.data['personal_code']
-            new_doc.personalCode = personal_code
-            new_doc.nationalCode = request.data['national_code']
-            new_doc.home_pNum = request.data['home_phone_num']
-            new_doc.user_pNum = request.data['user_phone_num']
-            new_doc.father_name = request.data['father_name']
-            new_doc.father_nationalCode = request.data['father_national_code']
-            new_doc.father_pNum = request.data['father_phone_num']
-            new_doc.father_jobName = request.data['father_job_name']
-            new_doc.father_jobAddress = request.data['father_job_address']
-            new_doc.father_job_pNum = request.data['father_job_phone_num']
-            new_doc.userPhoto = request.data['user_photo']
-            new_doc.nationalCardPhoto = request.data['national_card_photo']
-            new_doc.mother_name = request.data['mother_name']
-            new_doc.mother_jobName = request.data['mother_job_name']
-            new_doc.mother_jobAddress = request.data['mother_job_address']
-            new_doc.mother_job_pNum = request.data['mother_job_phone_num']
-            new_doc.mother_nationalCode = request.data['mother_national_code']
-            new_doc.mother_pNum = request.data['mother_pNum']
-            new_doc.citizen = request.data['citizen'] # 1 or 0
-            new_doc.citizen_Num = request.data['citizen_num']
-            new_doc.zipCode = request.data['zipcode']
-            new_doc.date_of_birth = request.data['date_birth']
-            new_doc.place_of_birth = request.data['place_birth']
-            new_doc.save()
-            return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
+                message = serializer.errors
+                return Response({"status_code":"400" , "error": "","data":message,"message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
