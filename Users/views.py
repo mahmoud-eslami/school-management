@@ -156,7 +156,7 @@ class registerUser(APIView):
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
                 new_userDoc.save()
 
-                return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Created"},status.HTTP_200_OK)
+                return Response({"status_code":"200" ,"error":"","data": {"user_id":str(new_user.id),"username":"کد ملی وارد شده","password":"کد ملی وارد شده",} ,"message":"User Created"},status.HTTP_200_OK)
             else:
                 message = serializer.errors
                 return Response({"status_code":"400" , "error": "","data":message,"message":""},)
