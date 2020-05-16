@@ -8,9 +8,10 @@ from .models import *
 import traceback
 from . import serializers
 
+
 class ImageApi(APIView):
     permission_classes=(IsAuthenticated,)
-
+    #################################### get method for find specific user images
     def get(self , request):
         try:
             user_id = request.GET['user_id']
@@ -25,21 +26,72 @@ class ImageApi(APIView):
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
             return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
+    ######################################## post method for upload image
     def post(self , request):
         try:
-            pass
+            serializer = serializers.ImageSerilizer(data = request.data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"status_code":"200" , "error": "","data":"","message":"Image Uploaded Success"},)
+            else:
+                message = serializer.errors
+                return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
         except:
-            pass
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
+
 
 class UserApi(APIView):
     permission_classes=(IsAuthenticated,)
+    ######################### get method for find specific user
     def get(self ,request):
-        pass
+        try:
+            id = request.GET['id']
+            if User.objects.all().filter(id = id).exists():
+                temp_user = User.objects.get(id = id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+            serializer = serializers.UserSerializer(temp_user)
+            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
+
+    ######################### put method for edit specific user
     def put(self , request):
-        pass
+        try:
+            id = request.GET['id']
+            if User.objects.all().filter(id = id).exists():
+                temp_user = User.objects.get(id = id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+            serializer = serializers.UserSerializer(temp_user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"status_code":"200" , "error": "","data":"","message":"User Updated Success"},)
+            else:
+                message = serializer.errors
+                return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
+
     def delete(self , request):
-        pass
+        try:
+            id = request.GET['id']
+            if User.objects.all().filter(id = id).exists():
+                User.objects.get(id = id).delete()
+                return Response({"status_code":"200" , "error": "","data":"","message":"User Deleted Success"},)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)    
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" , "error": message,"data":"","message":""},)
 
 class UserDocApi(APIView):
     permission_classes=(IsAuthenticated,)
@@ -116,81 +168,3 @@ class registerUser(APIView):
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
             return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
-class findUser(APIView):
-    permission_classes=(IsAuthenticated,)
-    def get(self, request):
-        try:
-            temp_id = request.GET['user_id']
-            temp_user = User.objects.get(id = temp_id)
-            serialized_data = serializers.User(temp_user)
-            json_data = serialized_data.data
-            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
-class findUserDoc(APIView):
-    permission_classes=(IsAuthenticated,)
-    def get(self, request):
-        try:
-            temp_id = request.GET['user_id']
-            temp_user_doc = userDoc.objects.get(user_id = temp_id)
-            serialized_data = serializers.UserDoc(temp_user_doc)
-            json_data = serialized_data.data
-            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
-class editSpecificUser(APIView):
-    permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
-
-class editSpecificUserProfile(APIView):
-    permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
-
-class editSpecificUserDoc(APIView):
-    permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            pass
-        except:
-            pass
-
-class deleteUser(APIView):
-    permission_classes=(IsAuthenticated,)
-    def post(self, request):
-        try:
-            user_id = request.data['user_id']
-            User.objects.all().filter(id = user_id).delete()
-            return Response({"status_code":"200" ,"error":"","data": "" ,"message":"User Deleted Success"},status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
-
-class getAllUser(APIView):
-    permission_classes=(IsAuthenticated,)
-    def get(self, request):
-        try:
-            temp_users = User.objects.all()
-            serilized_data = serializers.User(temp_users, many=True)
-            json_data = serilized_data.data
-            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error": message,"data": "" ,"message":""},)

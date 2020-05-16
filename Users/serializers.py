@@ -15,21 +15,19 @@ class ImageSerilizer(serializers.Serializer):
 
 class UserSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True,max_length=5)
-    username = serializers.CharField(allow_null=False,allow_blank=True,max_length=5)
-    first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=5)
-    last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=5)
-    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=5)
-    date_joined = serializers.DateTimeField()
+    username = serializers.CharField(read_only=True,allow_null=False,allow_blank=True,max_length=20)
+    first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
+    last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
+    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=20)
+    date_joined = serializers.DateTimeField(read_only=True)
 
     def create(self , validated_data):
         return User.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
-        instance.username = validated_data.get('username' , instance.username)
         instance.first_name = validated_data.get('first_name' , instance.first_name)
         instance.last_name = validated_data.get('last_name' , instance.last_name)
         instance.email = validated_data.get('email' , instance.email)
-        instance.date_joined = validated_data.get('date_joined' , instance.date_joined)
         instance.save()
         return instance
 
@@ -38,7 +36,7 @@ class UserDocSerializer(serializers.Serializer):
     user_id = serializers.CharField(read_only=True)
     role = serializers.ChoiceField(choices=role_choices,default=STUDENT)
     uuid = serializers.UUIDField()
-    religon = erializers.CharField(max_length=40,allow_blank=True,allow_null=True)
+    religon = serializers.CharField(max_length=40,allow_blank=True,allow_null=True)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userIdCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)

@@ -27,10 +27,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #==============================================
     # this urls route you to Users app urls.py
-    path('Users/' , include('Users.urls')),
+    path('Users/App/' , include('Users.urls')),
     #==============================================
     # this urls route you to Users app urls.py
-    path('News/' , include('News.urls')),
+    path('News/App/' , include('News.urls')),
     #==============================================
     # token urls
     path('api/login/',TokenObtainPairView.as_view(),name='TokenObtainPairView'),
