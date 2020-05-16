@@ -56,8 +56,10 @@ section_choices = [
 class userDoc(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doc')
     uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    userPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
-    nationalCardPhoto = models.ImageField(upload_to='uploads',blank=True,null=True)
+    religon = models.CharField(max_length=20,blank=True,null=True)
+    userPhoto = models.CharField(max_length=250,blank=True,null=True)
+    userNationalCardPhoto = models.CharField(max_length=250,blank=True,null=True)
+    userIdCardPhoto = models.CharField(max_length=250,blank=True,null=True)
     user_pNum = models.CharField(max_length=40,blank=False,null=True)
     home_pNum = models.CharField(max_length=40,blank=False,null=True)
     address = models.CharField(max_length=250,null=True,blank=False)
@@ -77,7 +79,7 @@ class userDoc(models.Model):
     mother_jobAddress = models.CharField(max_length=250,null=True,blank=False)
     mother_job_pNum = models.CharField(max_length=40,blank=False,null=True)
     citizen_Num = models.CharField(max_length=40,blank=True,null=True)
-    date_of_birth = models.DateTimeField(blank=False,null=True)
+    date_of_birth = models.CharField(max_length=40,blank=False,null=True)
     place_of_birth = models.CharField(max_length=40,blank=False,null=True)
     role = models.CharField(max_length=1,choices=role_choices,default=STUDENT)
     citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
@@ -86,3 +88,7 @@ class userDoc(models.Model):
 
     class Meta:
         unique_together = ('user','personalCode',)
+
+class Images(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='uploads',blank=False,null=True)

@@ -1,7 +1,19 @@
 from rest_framework import serializers
 from .models import *
 
-class User(serializers.Serializer):
+class ImageSerilizer(serializers.Serializer):
+    user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
+    image = serializers.ImageField(max_length=None, allow_empty_file=False,)
+
+    def create(self , validated_data):
+        return Images.objects.create(**validated_data)
+
+    def update(self , instance , validated_data):
+        instance.image = validated_data.get('image' , instance.image)
+        instance.save()
+        return instance
+
+class UserSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True,max_length=5)
     username = serializers.CharField(allow_null=False,allow_blank=True,max_length=5)
     first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=5)
@@ -22,12 +34,14 @@ class User(serializers.Serializer):
         return instance
 
 
-class UserDoc(serializers.Serializer):
+class UserDocSerializer(serializers.Serializer):
     user_id = serializers.CharField(read_only=True)
     role = serializers.ChoiceField(choices=role_choices,default=STUDENT)
     uuid = serializers.UUIDField()
-    userPhoto = serializers.ImageField()
-    nationalCardPhoto = serializers.ImageField()
+    religon = erializers.CharField(max_length=40,allow_blank=True,allow_null=True)
+    userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
+    userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
+    userIdCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     user_pNum = serializers.CharField(max_length=40,allow_blank=False,allow_null=True)
     home_pNum = serializers.CharField(max_length=40,allow_blank=False,allow_null=True)
     address = serializers.CharField(max_length=250,allow_null=True,allow_blank=False)
@@ -47,7 +61,7 @@ class UserDoc(serializers.Serializer):
     mother_jobAddress = serializers.CharField(max_length=250,allow_null=True,allow_blank=False)
     mother_job_pNum = serializers.CharField(max_length=40,allow_blank=False,allow_null=True)
     citizen_Num = serializers.CharField(max_length=40,allow_blank=True,allow_null=True)
-    date_of_birth = serializers.DateTimeField()
+    date_of_birth = serializers.CharField(max_length=40,allow_blank=False,allow_null=True)
     place_of_birth = serializers.CharField(max_length=40,allow_blank=False,allow_null=True)
     citizen = serializers.ChoiceField(choices=citizen_choices,default=IRAN)
     gender = serializers.ChoiceField(choices=gender_choices,default=MAN)
