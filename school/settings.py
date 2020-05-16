@@ -16,6 +16,9 @@ from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+MEDIA_ROOT = os.path.join(BASE_DIR )
+MEDIA_URL = '/media/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -27,7 +30,7 @@ SECRET_KEY = 'oy7xjf%3-uqrt5jcrpytc8lj&hi09luq1d5+mn)7s+1(fz#^bj'
 DEBUG = True
 
 #Allowed Host
-ALLOWED_HOSTS = ['localhost','051c5408.ngrok.io','03881909.ngrok.io','6e1cd20c.ngrok.io','c5dae55e.ngrok.io']
+ALLOWED_HOSTS = ['localhost','f11132df.ngrok.io','61963c3a.ngrok.io']
 
 #simpleJWT settings
 SIMPLE_JWT = {
