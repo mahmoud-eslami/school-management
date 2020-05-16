@@ -8,6 +8,48 @@ from .models import *
 import traceback
 from . import serializers
 
+class ImageApi(APIView):
+    permission_classes=(IsAuthenticated,)
+
+    def get(self , request):
+        try:
+            user_id = request.GET['user_id']
+            image_list = []
+            if Images.objects.all().filter(user_id = user_id).exists():
+                image_list = Images.objects.all().filter(user_id = user_id)
+            else:
+                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+            serializer = serializers.ImageSerilizer(image_list , many=True)
+            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
+
+    def post(self , request):
+        try:
+            pass
+        except:
+            pass
+
+class UserApi(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self ,request):
+        pass
+    def put(self , request):
+        pass
+    def delete(self , request):
+        pass
+
+class UserDocApi(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self ,request):
+        pass
+    def put(self , request):
+        pass
+    def delete(self , request):
+        pass
+
 class registerUser(APIView):
     permission_classes=(IsAuthenticated,)
     def post(self, request):
@@ -82,20 +124,6 @@ class findUser(APIView):
             temp_id = request.GET['user_id']
             temp_user = User.objects.get(id = temp_id)
             serialized_data = serializers.User(temp_user)
-            json_data = serialized_data.data
-            return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
-
-class findUserProfile(APIView):
-    permission_classes=(IsAuthenticated,)
-    def get(self, request):
-        try:
-            temp_id = request.GET['user_id']
-            temp_user_profile = userProfile.objects.get(user_id = temp_id)
-            serialized_data = serializers.UserProfile(temp_user_profile)
             json_data = serialized_data.data
             return Response({"status_code":"200" ,"error":"","data": json_data ,"message":""},status.HTTP_200_OK)
         except Exception as e:
