@@ -9,8 +9,26 @@ import traceback
 from . import serializers
 
 
+class userProfileApi(APIView):
+    permission_classes=(IsAuthenticated,)
+    #################################### get method for find specific user profile
+    def get(self , request):
+        try:
+            user_id = request.GET['user_id']
+            if User.objects.all().filter(id = user_id).exists():
+                temp_user = User.objects.get(id = user_id)
+                temp_userDoc = userDoc.objects.get(user_id = user_id)
+                return Response({"status_code":"200" , "error": [] ,"data":{"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto},"message":""},)
+            else:
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},)
+
+
 class ImageApi(APIView):
-    #permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
     #################################### get method for find specific user images
     def get(self , request):
         try:
@@ -19,9 +37,9 @@ class ImageApi(APIView):
             if Images.objects.all().filter(user_id = user_id).exists():
                 image_list = Images.objects.all().filter(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
             serializer = serializers.ImageSerilizer(image_list , many=True)
-            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -33,7 +51,7 @@ class ImageApi(APIView):
             user_id = request.data['user_id']
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": "","data": str(serializer.instance.image) ,"message":"Image Uploaded Success"},)
+                return Response({"status_code":"200" , "error": [],"data": str(serializer.instance.image) ,"message":"Image Uploaded Success"},)
             else:
                 message = serializer.errors
                 return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
@@ -52,9 +70,9 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
             serializer = serializers.UserSerializer(temp_user)
-            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -67,11 +85,11 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
             serializer = serializers.UserSerializer(temp_user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": "","data":"","message":"User Updated Success"},)
+                return Response({"status_code":"200" , "error": [],"data":"","message":"User Updated Success"},)
             else:
                 message = serializer.errors
                 return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
@@ -85,9 +103,9 @@ class UserApi(APIView):
             id = request.GET['id']
             if User.objects.all().filter(id = id).exists():
                 User.objects.get(id = id).delete()
-                return Response({"status_code":"200" , "error": "","data":"","message":"User Deleted Success"},)
+                return Response({"status_code":"200" , "error": [],"data":"","message":"User Deleted Success"},)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -102,9 +120,9 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
             serializer = serializers.UserDocSerializer(temp_userDoc)
-            return Response({"status_code":"200" , "error":"", "data": serializer.data , "message":""},status.HTTP_200_OK)
+            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -116,20 +134,20 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": "object does not exist for this user","data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
             serializer = serializers.UserDocSerializer(temp_userDoc, request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": "","data":"","message":"User Updated Success"},)
+                return Response({"status_code":"200" , "error": [],"data":"","message":"User Updated Success"},)
             else:
                 message = serializer.errors
-                return Response({"status_code":"400" , "error": "","data":message,"message":""},)
+                return Response({"status_code":"400" , "error": [],"data":message,"message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
             return Response({"status_code":"500" , "error": message,"data":"","message":""},)
 
-class registerUser(APIView):
+class registerUserApi(APIView):
     permission_classes=(IsAuthenticated,)
     def post(self, request):
         try:
@@ -156,10 +174,10 @@ class registerUser(APIView):
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
                 new_userDoc.save()
 
-                return Response({"status_code":"200" ,"error":"","data": {"user_id":str(new_user.id),"username":"کد ملی وارد شده","password":"کد ملی وارد شده",} ,"message":"User Created"},status.HTTP_200_OK)
+                return Response({"status_code":"200" ,"error":[],"data": {"user_id":str(new_user.id),"username":"کد ملی وارد شده","password":"کد ملی وارد شده",} ,"message":"User Created"},status.HTTP_200_OK)
             else:
                 message = serializer.errors
-                return Response({"status_code":"400" , "error": "","data":message,"message":""},)
+                return Response({"status_code":"400" , "error": [],"data":message,"message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
