@@ -18,9 +18,11 @@ class userProfileApi(APIView):
             if User.objects.all().filter(id = user_id).exists():
                 temp_user = User.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
-                return Response({"status_code":"200" , "error": [] ,"data":{"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto},"message":""},)
+                return Response({"status_code":"200" , "error": []
+                ,"data":{"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
+                "role":temp_userDoc.role},"message":""},)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -37,7 +39,7 @@ class ImageApi(APIView):
             if Images.objects.all().filter(user_id = user_id).exists():
                 image_list = Images.objects.all().filter(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربری با این ایدی وجود ندارد"],"data":"","message":""},)
             serializer = serializers.ImageSerilizer(image_list , many=True)
             return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
@@ -49,12 +51,15 @@ class ImageApi(APIView):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
             user_id = request.data['user_id']
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"status_code":"200" , "error": [],"data": str(serializer.instance.image) ,"message":"Image Uploaded Success"},)
+            if User.objects.all().filter(id = user_id).exists():
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response({"status_code":"200" , "error": [],"data": str(serializer.instance.image) ,"message":"Image Uploaded Success"},)
+                else:
+                    message = serializer.errors
+                    return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
             else:
-                message = serializer.errors
-                return Response({"status_code":"400" , "error": message ,"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربری با این ایدی وجود ندارد"],"data":"","message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -70,7 +75,7 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
             serializer = serializers.UserSerializer(temp_user)
             return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
@@ -85,7 +90,7 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
             serializer = serializers.UserSerializer(temp_user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -105,7 +110,7 @@ class UserApi(APIView):
                 User.objects.get(id = id).delete()
                 return Response({"status_code":"200" , "error": [],"data":"","message":"User Deleted Success"},)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -120,7 +125,7 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
             serializer = serializers.UserDocSerializer(temp_userDoc)
             return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
         except Exception as e:
@@ -134,7 +139,7 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"400" , "error": ["object does not exist for this user"],"data":"","message":""},)
+                return Response({"status_code":"400" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},)
             serializer = serializers.UserDocSerializer(temp_userDoc, request.data)
             if serializer.is_valid():
                 serializer.save()
