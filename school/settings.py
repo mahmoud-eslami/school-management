@@ -27,8 +27,8 @@ SECRET_KEY = 'oy7xjf%3-uqrt5jcrpytc8lj&hi09luq1d5+mn)7s+1(fz#^bj'
 DEBUG = True
 
 #Allowed Host
-ALLOWED_HOSTS = ['localhost','db','schooldb-novinschool.fandogh.cloud','myrest-novinschool.fandogh.cloud','9558de00.ngrok.io']
-
+ALLOWED_HOSTS = ['localhost','db','schooldb-novinschool.fandogh.cloud','myrest-novinschool.fandogh.cloud','9558de00.ngrok.io','a8703554.ngrok.io']
+CORS_ORIGIN_ALLOW_ALL = True
 #simpleJWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=40),
