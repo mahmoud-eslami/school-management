@@ -3,7 +3,7 @@ db.sqlite3
 *.pot
 *.py[co]
 .tox/
-pycache
+__pycache__
 MANIFEST
 dist/
 docs/_build/

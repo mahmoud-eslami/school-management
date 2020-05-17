@@ -14,10 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView,)
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
+    # access to jet dashboard
+    #path('jet/',include('jet.urls','jet')),
+    #path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    #==============================================
     path('admin/', admin.site.urls),
-    path('usersApi/' , include('Users.urls'))
-    #path('accounts/', include('django.contrib.auth.usrls'))   for login in the site
-]
+    #==============================================
+    # this urls route you to Users app urls.py
+    path('Users/App/' , include('Users.urls')),
+    #==============================================
+    # this urls route you to Users app urls.py
+    path('News/App/' , include('News.urls')),
+    #==============================================
+    # token urls
+    path('api/login/',TokenObtainPairView.as_view(),name='TokenObtainPairView'),
+    path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

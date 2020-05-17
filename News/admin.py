@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+# new annotaition use instead of admin.site.register
+############################
+@admin.register(News)
+
