@@ -5,9 +5,8 @@ from django.contrib.auth.admin import User
 
 @admin.register(userDoc)
 class CustomDoc(admin.ModelAdmin):
-    list_display=['user_id','personalCode','nationalCode','father_name','address','gender']
+    list_display=['user_id','personalCode','nationalCode','father_name','address','gender','role']
 
-
-@admin.register(userProfile)
-class CustomUserProfile(admin.ModelAdmin):
-    list_display=['user_id','role','uuid']
+@admin.register(Images)
+class CustomImages(admin.ModelAdmin):
+    list_display = ['user_id','image']

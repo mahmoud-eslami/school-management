@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView,)
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # access to jet dashboard
@@ -25,12 +27,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #==============================================
     # this urls route you to Users app urls.py
-    path('Users/' , include('Users.urls')),
+    path('Users/App/' , include('Users.urls')),
     #==============================================
     # this urls route you to Users app urls.py
-    path('News/' , include('News.urls')),
+    path('News/App/' , include('News.urls')),
     #==============================================
     # token urls
     path('api/login/',TokenObtainPairView.as_view(),name='TokenObtainPairView'),
     path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

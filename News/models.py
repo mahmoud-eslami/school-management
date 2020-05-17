@@ -8,8 +8,7 @@ class News(models.Model):
     content = models.CharField(max_length=200,blank=False,null=True)
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='author')
     pic = models.ImageField(upload_to='uploads',blank=True,null=True)
-    release_date = models.DateTimeField()
+    release_date = models.DateTimeField(auto_now_add=True,blank=True)
 
     class Meta:
         unique_together = ('id','title',)
-        

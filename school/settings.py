@@ -27,7 +27,7 @@ SECRET_KEY = 'oy7xjf%3-uqrt5jcrpytc8lj&hi09luq1d5+mn)7s+1(fz#^bj'
 DEBUG = True
 
 #Allowed Host
-ALLOWED_HOSTS = ['localhost','051c5408.ngrok.io','03881909.ngrok.io','6e1cd20c.ngrok.io']
+ALLOWED_HOSTS = ['localhost','f11132df.ngrok.io','61963c3a.ngrok.io','a6cdd3d7.ngrok.io']
 
 #simpleJWT settings
 SIMPLE_JWT = {
@@ -64,11 +64,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
     'Users',
     'News',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -157,3 +161,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
