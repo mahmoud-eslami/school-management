@@ -71,7 +71,7 @@ class UserDocSerializer(serializers.Serializer):
         return userDoc.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
-        instance.religion = validated_data.get('religon' , instance.religion)
+        instance.religion = validated_data.get('religion' , instance.religion)
         instance.userPhoto = validated_data.get('userPhoto' , instance.userPhoto)
         instance.userNationalCardPhoto = validated_data.get('userNationalCardPhoto' , instance.userNationalCardPhoto)
         instance.userIdCardPhoto = validated_data.get('userIdCardPhoto' , instance.userIdCardPhoto)
@@ -108,7 +108,7 @@ class UserDocSerializer(serializers.Serializer):
 class UserRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
     last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
-    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=20)
+    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=100)
     role = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
     religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)

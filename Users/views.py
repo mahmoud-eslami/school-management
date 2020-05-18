@@ -146,7 +146,7 @@ class UserDocApi(APIView):
                 return Response({"status_code":"200" , "error": [],"data":"","message":"پرونده با موفقیت بروزرسانی شد"},)
             else:
                 message = serializer.errors
-                return Response({"status_code":"406" , "error": [],"data":message,"message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return Response({"status_code":"406" , "error": message,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -167,7 +167,7 @@ class registerUserApi(APIView):
                 new_user.set_password(serializer.data.get('nationalCode'))
                 new_user.save()
 
-                new_userDoc = userDoc(user_id = new_user.id,religon=serializer.data.get('religon'),userPhoto=serializer.data.get('userPhoto'),
+                new_userDoc = userDoc(user_id = new_user.id,religion=serializer.data.get('religion'),userPhoto=serializer.data.get('userPhoto'),
                 userNationalCardPhoto=serializer.data.get('userNationalCardPhoto'),userIdCardPhoto=serializer.data.get('userIdCardPhoto'),
                 user_pNum=serializer.data.get('user_pNum'),home_pNum=serializer.data.get('home_pNum'),address=serializer.data.get('address'),
                 zipCode=serializer.data.get('zipCode'),personalCode=serializer.data.get('personalCode'),nationalCode=serializer.data.get('nationalCode'),
@@ -182,7 +182,7 @@ class registerUserApi(APIView):
                 return Response({"status_code":"200" ,"error":[],"data": {"user_id":str(new_user.id),"username":"کلمه کاربری برابر کد ملی","password":"رمز عبور برابر کد ملی",} ,"message":"User Created"},status.HTTP_200_OK)
             else:
                 message = serializer.errors
-                return Response({"status_code":"406" , "error": [],"data":message,"message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return Response({"status_code":"406" , "error": message,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
