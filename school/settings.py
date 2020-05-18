@@ -27,8 +27,8 @@ SECRET_KEY = 'oy7xjf%3-uqrt5jcrpytc8lj&hi09luq1d5+mn)7s+1(fz#^bj'
 DEBUG = True
 
 #Allowed Host
-ALLOWED_HOSTS = ['localhost','f11132df.ngrok.io','61963c3a.ngrok.io','a6cdd3d7.ngrok.io']
-
+ALLOWED_HOSTS = ['localhost','db','schooldb-novinschool.fandogh.cloud','myrest-novinschool.fandogh.cloud','9558de00.ngrok.io','a8703554.ngrok.io']
+CORS_ORIGIN_ALLOW_ALL = True
 #simpleJWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=40),
@@ -51,6 +51,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=40),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=2),
 }
+
 
 # Application definition
 
@@ -121,6 +122,14 @@ DATABASES = {
             'read_default_file': './my.cnf',
         },
     }
+     #'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'school',
+    #    'USER': 'root',
+    #    'PASSWORD': 'mahmoud1998',
+    #    'HOST': 'db',
+    #    'PORT': '3306',
+    #},
 }
 
 
@@ -156,11 +165,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+#AUTH_USER_MODEL = 'api.User'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

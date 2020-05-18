@@ -22,6 +22,11 @@ two = '2'
 three = '3'
 four = '4'
 five = '5'
+six = '6'
+seven = '7'
+eight = '8'
+nine = '9'
+employee = '10'
 #############################
 #############################
 #role choices
@@ -49,6 +54,11 @@ section_choices = [
     (three,'سوم ابتدایی'),
     (four,'چهارم ابتدایی'),
     (five,'پنجم ابتدایی'),
+    (six,'ششم'),
+    (seven,'هفتم'),
+    (eight,'هشتم'),
+    (nine,'نهم'),
+    (employee,'پرسنل'),
 ]
 #############################
 
@@ -56,37 +66,37 @@ section_choices = [
 class userDoc(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doc')
     uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    religon = models.CharField(max_length=20,blank=True,null=True)
+    religion = models.CharField(max_length=100,blank=False,null=True)
     userPhoto = models.CharField(max_length=250,blank=True,null=True)
     userNationalCardPhoto = models.CharField(max_length=250,blank=True,null=True)
     userIdCardPhoto = models.CharField(max_length=250,blank=True,null=True)
-    user_pNum = models.CharField(max_length=40,blank=False,null=True)
-    home_pNum = models.CharField(max_length=40,blank=False,null=True)
-    address = models.CharField(max_length=250,null=True,blank=False)
-    zipCode = models.CharField(max_length=20,blank=False,null=True)
-    personalCode = models.CharField(max_length=20,null=True,blank=True)
-    nationalCode = models.CharField(max_length=20,blank=False,null=True,unique=True)
-    father_nationalCode = models.CharField(max_length=20,blank=True,null=True)
+    user_pNum = models.CharField(max_length=11,blank=False,null=True)
+    home_pNum = models.CharField(max_length=11,blank=False,null=True)
+    address = models.CharField(max_length=250,blank=False,null=True,)
+    zipCode = models.CharField(max_length=10,blank=False,null=True)
+    personalCode = models.CharField(max_length=10,blank=False,null=True,)
+    nationalCode = models.CharField(max_length=10,blank=False,null=True,unique=True)
+    father_nationalCode = models.CharField(max_length=10,blank=True,null=True)
     father_name = models.CharField(max_length=40,blank=True,null=True)
-    father_pNum = models.CharField(max_length=40,blank=True,null=True)
-    father_jobName = models.CharField(max_length=40,blank=True,null=True)
+    father_pNum = models.CharField(max_length=11,blank=True,null=True)
+    father_jobName = models.CharField(max_length=50,blank=True,null=True)
     father_jobAddress = models.CharField(max_length=250,null=True,blank=True)
-    father_job_pNum = models.CharField(max_length=40,blank=True,null=True)
-    father_job_postalCode = models.CharField(max_length=40,blank=True,null=True)
-    mother_nationalCode = models.CharField(max_length=20,blank=True,null=True)
+    father_job_pNum = models.CharField(max_length=11,blank=True,null=True)
+    father_job_postalCode = models.CharField(max_length=10,blank=True,null=True)
+    mother_nationalCode = models.CharField(max_length=10,blank=True,null=True)
     mother_name = models.CharField(max_length=40,blank=True,null=True)
-    mother_pNum = models.CharField(max_length=40,blank=True,null=True)
-    mother_jobName = models.CharField(max_length=40,blank=True,null=True)
+    mother_pNum = models.CharField(max_length=11,blank=True,null=True)
+    mother_jobName = models.CharField(max_length=50,blank=True,null=True)
     mother_jobAddress = models.CharField(max_length=250,null=True,blank=True)
-    mother_job_pNum = models.CharField(max_length=40,blank=True,null=True)
-    mother_job_postalCode = models.CharField(max_length=40,blank=True,null=True)
-    citizen_Num = models.CharField(max_length=40,blank=True,null=True)
-    date_of_birth = models.CharField(max_length=40,blank=False,null=True)
-    place_of_birth = models.CharField(max_length=40,blank=False,null=True)
+    mother_job_pNum = models.CharField(max_length=11,blank=True,null=True)
+    mother_job_postalCode = models.CharField(max_length=10,blank=True,null=True)
+    citizen_Num = models.CharField(max_length=11,blank=True,null=True)
+    date_of_birth = models.CharField(max_length=50,blank=False,null=True)
+    place_of_birth = models.CharField(max_length=50,blank=False,null=True)
     role = models.CharField(max_length=1,choices=role_choices,default=STUDENT)
     citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
     gender = models.CharField(max_length=1,choices=gender_choices,default=MAN)
-    section = models.CharField(max_length=1,choices=section_choices,default=pre_one)
+    section = models.CharField(max_length=2,choices=section_choices,default=employee)
 
     class Meta:
         unique_together = ('user','personalCode',)
