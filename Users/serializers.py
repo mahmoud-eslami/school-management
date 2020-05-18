@@ -71,7 +71,7 @@ class UserDocSerializer(serializers.Serializer):
         return userDoc.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
-        instance.religon = validated_data.get('religon' , instance.religon)
+        instance.religion = validated_data.get('religon' , instance.religion)
         instance.userPhoto = validated_data.get('userPhoto' , instance.userPhoto)
         instance.userNationalCardPhoto = validated_data.get('userNationalCardPhoto' , instance.userNationalCardPhoto)
         instance.userIdCardPhoto = validated_data.get('userIdCardPhoto' , instance.userIdCardPhoto)
