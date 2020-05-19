@@ -7,7 +7,7 @@ from rest_framework import status
 from .models import *
 import traceback
 from . import serializers
-from .methods import *
+from school.methods import *
 
 
 class userProfileApi(APIView):
