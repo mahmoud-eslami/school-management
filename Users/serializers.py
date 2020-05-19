@@ -104,7 +104,8 @@ class UserDocSerializer(serializers.Serializer):
         instance.section = validated_data.get('section' , instance.section)
         instance.save()
         return instance
-
+        
+# serialize data for register a new user
 class UserRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
     last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
