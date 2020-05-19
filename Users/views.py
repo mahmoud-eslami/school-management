@@ -73,9 +73,9 @@ class UserApi(APIView):
     ######################### get method for find specific user
     def get(self ,request):
         try:
-            id = request.GET['id']
-            if User.objects.all().filter(id = id).exists():
-                temp_user = User.objects.get(id = id)
+            user_id = request.GET['user_id']
+            if User.objects.all().filter(id = user_id).exists():
+                temp_user = User.objects.get(id = user_id)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user)
@@ -88,9 +88,9 @@ class UserApi(APIView):
     ######################### put method for edit specific user
     def put(self , request):
         try:
-            id = request.GET['id']
-            if User.objects.all().filter(id = id).exists():
-                temp_user = User.objects.get(id = id)
+            user_id = request.GET['user_id']
+            if User.objects.all().filter(id = user_id).exists():
+                temp_user = User.objects.get(id = user_id)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user, data=request.data)
@@ -107,9 +107,9 @@ class UserApi(APIView):
 
     def delete(self , request):
         try:
-            id = request.GET['id']
-            if User.objects.all().filter(id = id).exists():
-                User.objects.get(id = id).delete()
+            user_id = request.GET['user_id']
+            if User.objects.all().filter(id = user_id).exists():
+                User.objects.get(id = user_id).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="کاربر با موفقیت حذف شد", data="", status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
