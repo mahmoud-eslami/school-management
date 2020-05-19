@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from  rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import *
 import traceback
 from . import serializers
+from .methods import *
 
 
 class userProfileApi(APIView):
@@ -18,15 +19,15 @@ class userProfileApi(APIView):
             if User.objects.all().filter(id = user_id).exists():
                 temp_user = User.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
-                return Response({"status_code":"200" , "error": []
-                ,"data":{"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
-                "role":temp_userDoc.role},"message":""},)
+                return CustomResponse(self, status_code=200, errors=[], message="", data={"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
+                "role":temp_userDoc.role}, status=status.HTTP_200_OK)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
+                message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ImageApi(APIView):
@@ -39,13 +40,14 @@ class ImageApi(APIView):
             if Images.objects.all().filter(user_id = user_id).exists():
                 image_list = Images.objects.all().filter(user_id = user_id)
             else:
-                return Response({"status_code":"406" , "error": ["کاربری با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
+                message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.ImageSerilizer(image_list , many=True)
-            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
+            return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     ######################################## post method for upload image
     def post(self , request):
         try:
@@ -54,16 +56,16 @@ class ImageApi(APIView):
             if User.objects.all().filter(id = user_id).exists():
                 if serializer.is_valid():
                     serializer.save()
-                    return Response({"status_code":"200" , "error": [],"data": str(serializer.instance.image) ,"message":"عکس با موفقیت اپلود شد"},)
+                    return CustomResponse(self, status_code=200, errors=[], message="عکس با موفقیت اپلود شد", data=str(serializer.instance.image), status=status.HTTP_200_OK)
                 else:
                     message = serializer.errors
-                    return Response({"status_code":"406" , "error": message ,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                return Response({"status_code":"406" , "error": ["کاربری با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" , "error": message,"data":"","message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserApi(APIView):
@@ -75,13 +77,13 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user)
-            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
+            CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     ######################### put method for edit specific user
     def put(self , request):
@@ -90,31 +92,31 @@ class UserApi(APIView):
             if User.objects.all().filter(id = id).exists():
                 temp_user = User.objects.get(id = id)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": [],"data":"","message":"اطلاعات کاربر بروزرسانی شد"},)
+                return CustomResponse(self, status_code=200, errors=[], message="اطلاعات کاربر بروزرسانی شد", data="", status=status.HTTP_200_OK)
             else:
                 message = serializer.errors
-                return Response({"status_code":"406" , "error": message ,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" , "error": message,"data":"","message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self , request):
         try:
             id = request.GET['id']
             if User.objects.all().filter(id = id).exists():
                 User.objects.get(id = id).delete()
-                return Response({"status_code":"200" , "error": [],"data":"","message":"کاربر با موفقیت حذف شد"},)
+                return CustomResponse(self, status_code=200, errors=[], message="کاربر با موفقیت حذف شد", data="", status=status.HTTP_200_OK)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" , "error": message,"data":"","message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UserDocApi(APIView):
     permission_classes=(IsAuthenticated,)
@@ -125,13 +127,13 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserDocSerializer(temp_userDoc)
-            return Response({"status_code":"200" , "error":[], "data": serializer.data , "message":""},status.HTTP_200_OK)
+            return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" , "error": message,"data":"","message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     ############################### method for edit specific user doc
     def put(self , request):
         try:
@@ -139,18 +141,18 @@ class UserDocApi(APIView):
             if userDoc.objects.all().filter(user_id = user_id).exists():
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
             else:
-                return Response({"status_code":"406" , "error": ["کاربر با این ایدی وجود ندارد"],"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserDocSerializer(temp_userDoc, request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status_code":"200" , "error": [],"data":"","message":"پرونده با موفقیت بروزرسانی شد"},)
+                return CustomResponse(self, status_code=200, errors=[], message="پرونده با موفقیت بروزرسانی شد", data="", status=status.HTTP_200_OK)
             else:
                 message = serializer.errors
-                return Response({"status_code":"406" , "error": message,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" , "error": message,"data":"","message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class registerUserApi(APIView):
     permission_classes=(IsAuthenticated,)
@@ -179,11 +181,12 @@ class registerUserApi(APIView):
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
                 new_userDoc.save()
 
-                return Response({"status_code":"200" ,"error":[],"data": {"user_id":str(new_user.id),"username":"کلمه کاربری برابر کد ملی","password":"رمز عبور برابر کد ملی",} ,"message":"User Created"},status.HTTP_200_OK)
+                return CustomResponse(self, status_code=200, errors=[], message="",
+                data={"user_id":str(new_user.id),"username":"کلمه کاربری برابر کد ملی","password":"رمز عبور برابر کد ملی",}, status=status.HTTP_200_OK)
             else:
                 message = serializer.errors
-                return Response({"status_code":"406" , "error": message,"data":"","message":""},status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
-            return Response({"status_code":"500" ,"error":message,"data": "" ,"message":""},status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
