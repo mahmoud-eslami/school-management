@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'Users',
     'News',
+    'Classes',
 ]
 
 MIDDLEWARE = [
