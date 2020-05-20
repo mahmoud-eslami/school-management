@@ -2,15 +2,15 @@ from rest_framework import serializers
 from .models import *
 
 
-class ClassSerializer(serializers.Serializer):
+class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classes
-        files = '__all__'
+        fields = '__all__'
         #read_only_field = ['id'] #### PK set read only as default
-        def create(self , validated_data):
-            return Classes.objects.create(**validated_data)
+    def create(self , validated_data):
+        return Classes.objects.create(**validated_data)
 
-        def update(self , instance , validated_data):
-            instance.name = validated_data.get('name' ,instance.name)
-            instance.save()
-            return instance
+    def update(self , instance , validated_data):
+        instance.name = validated_data.get('name' ,instance.name)
+        instance.save()
+        return instance
