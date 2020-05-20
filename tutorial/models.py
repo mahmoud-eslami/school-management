@@ -1,0 +1,65 @@
+from django.db import models
+from django.contrib.auth.models import User
+
+
+
+pv = "0"
+public = "1"
+#==========
+#role
+MODERATION = '0'
+KARKONAN = '0'
+MOALEM = '1'
+DANESH_AMOOZ = '1'
+
+#====================================
+#section choice for post massage for all user or specefic user
+post_type_choice = [
+(pv,"پست شخصی"),
+(public, "عمومی"),
+]
+
+#===================================
+
+class Tutrial (models.Model):
+    # in theis class you can upload pdf for tutorial
+    id = models.AutoField(primary_key = True)
+    title = models.CharField(max_length=250,blank= False , null= True)
+    content = models.CharField(max_length=250 , blank= False , null = True)
+    writer  = models.ForeignKey(User,on_delete=models.CASCADE,related_name='author')
+    ttype = models.CharField(choices= post_type_choice,max_length = 1, blank = False ,default= public)
+    image = models.CharField(max_length= 250 , blank= True, null = True)
+    
+
+
+
+class file (models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    image = models.fields_all(upload_to='uploads',blank=False,null=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

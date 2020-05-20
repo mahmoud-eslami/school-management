@@ -75,7 +75,7 @@ class userDoc(models.Model):
     address = models.CharField(max_length=250,blank=False,null=True,)
     zipCode = models.CharField(max_length=10,blank=False,null=True)
     personalCode = models.CharField(max_length=10,blank=False,null=True,)
-    nationalCode = models.CharField(max_length=10,blank=False,null=True,unique=True)
+    nationalCode = models.CharField(max_length=10,blank=False,null=True,unique=True) # for being unique
     father_nationalCode = models.CharField(max_length=10,blank=True,null=True)
     father_name = models.CharField(max_length=40,blank=True,null=True)
     father_pNum = models.CharField(max_length=11,blank=True,null=True)
@@ -97,7 +97,8 @@ class userDoc(models.Model):
     citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
     gender = models.CharField(max_length=1,choices=gender_choices,default=MAN)
     section = models.CharField(max_length=2,choices=section_choices,default=employee)
-
+#========================================
+#dashtane hamzaman  ta field
     class Meta:
         unique_together = ('user','personalCode',)
 

@@ -7,4 +7,5 @@ urlpatterns = [
     path('user/api/',views.UserApi.as_view(),name='user'),
     path('images/api/',views.ImageApi.as_view(),name='image'),
     path('regiseter_user/',views.registerUserApi.as_view(),name='register_user'),
+    
 ]
