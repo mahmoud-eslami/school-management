@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+@admin.register(Classes)
+class CustomClasses(admin.ModelAdmin):
+    list_display=['user_id','name','id']
