@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import *
+from school.validators import *
 
 class ImageSerilizer(serializers.Serializer):
     user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
-    image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True)
+    image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True,validators=[validate_image_size,])
 
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
@@ -105,6 +106,7 @@ class UserDocSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+# serialize data for register a new user
 class UserRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
     last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)

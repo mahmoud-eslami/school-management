@@ -28,12 +28,14 @@ DEBUG = True
 
 #Allowed Host
 ALLOWED_HOSTS = ['localhost','db','schooldb-novinschool.fandogh.cloud','myrest-novinschool.fandogh.cloud','9558de00.ngrok.io','a8703554.ngrok.io']
+
+# this line allowed other app that run on local host to access to apis
 CORS_ORIGIN_ALLOW_ALL = True
 #simpleJWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=40),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 
     'ALGORITHM': 'HS256',
@@ -69,11 +71,15 @@ INSTALLED_APPS = [
     'corsheaders',
     'Users',
     'News',
+    'Classes',
 ]
 
 MIDDLEWARE = [
+# allow other apps to access to api
+#==================================================
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+#==================================================
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -167,11 +173,11 @@ USE_TZ = True
 
 #AUTH_USER_MODEL = 'api.User'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+# Media files (Images)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

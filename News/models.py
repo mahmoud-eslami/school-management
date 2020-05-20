@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 class News(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=20,blank=False,null=True,unique=True)
-    content = models.CharField(max_length=200,blank=False,null=True)
+    content = models.CharField(max_length=1000,blank=False,null=True)
     author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='author')
-    pic = models.ImageField(upload_to='uploads',blank=True,null=True)
-    release_date = models.DateTimeField(auto_now_add=True,blank=True)
+    pic = models.CharField(max_length=250,blank=True,null=True)
+    release_date = models.CharField(max_length=50,blank=False,null=True)
 
     class Meta:
         unique_together = ('id','title',)
