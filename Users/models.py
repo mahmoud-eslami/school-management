@@ -100,7 +100,7 @@ class userDoc(models.Model):
     section = models.CharField(max_length=2,choices=section_choices,default=employee)
 
     class Meta:
-        unique_together = ('user','personalCode',)
+        unique_together = ('user','nationalCode',)
 
 class Images(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
