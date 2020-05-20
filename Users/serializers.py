@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import *
+from school.validators import *
 
 class ImageSerilizer(serializers.Serializer):
     user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
-    image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True)
+    image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True,validators=[validate_image_size,])
 
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
@@ -36,7 +37,7 @@ class UserDocSerializer(serializers.Serializer):
     user_id = serializers.CharField(read_only=True)
     role = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
     uuid = serializers.UUIDField(read_only=True)
-    religon = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
+    religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userIdCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
@@ -71,7 +72,7 @@ class UserDocSerializer(serializers.Serializer):
         return userDoc.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
-        instance.religon = validated_data.get('religon' , instance.religon)
+        instance.religion = validated_data.get('religion' , instance.religion)
         instance.userPhoto = validated_data.get('userPhoto' , instance.userPhoto)
         instance.userNationalCardPhoto = validated_data.get('userNationalCardPhoto' , instance.userNationalCardPhoto)
         instance.userIdCardPhoto = validated_data.get('userIdCardPhoto' , instance.userIdCardPhoto)
@@ -105,12 +106,13 @@ class UserDocSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+# serialize data for register a new user
 class UserRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
     last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
-    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=20)
+    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=100)
     role = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
-    religon = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
+    religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userIdCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
