@@ -3,6 +3,5 @@ from . import *
 
 
 urlpatterns = [
-    #path('tutorial/api/', [view], name='tutorial')
-    pass
+    path('tutorial/api/', views.tutorialApi.as_view(), name='tutorial')
 ]

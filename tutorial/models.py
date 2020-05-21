@@ -35,9 +35,7 @@ class Tutrial (models.Model):
 
 class file (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    image = models.fields_all(upload_to='uploads',blank=False,null=True)
-
-
+    image = models.FileField(upload_to='uploads',blank=False,null=True,validators=[validate_file_extension])
 
 
 
