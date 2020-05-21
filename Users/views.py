@@ -8,6 +8,40 @@ import traceback
 from . import serializers
 from school.methods import *
 
+#user_id , codeMeli , section, first_name, last_name, role
+
+class GetAllUserInfo(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self , request):
+        try:
+            # get user id the sender of request to check his permission
+            user_id = request.GET['user_id']
+            requsted_user = MyUser.objects.get(id = user_id)
+            if requsted_user.role == '4':
+                return CustomResponse(self,
+                status_code=403,
+                errors=["شما دسترسی به این بخش را ندارید"],
+                message="", data="",
+                status=status.HTTP_403_FORBIDDEN)
+            else:
+                temp_users = MyUser.objects.all()
+                data = []
+                #Append our Custom data in a list to send in response
+                for user in temp_users:
+                    user_userDoc = userDoc.objects.get(user_id = user.id)
+                    data.append({
+                        'id':user.id,
+                        'first_name':user.first_name,
+                        'last_name':user.last_name,
+                        'nationalCode':user_userDoc.nationalCode,
+                        'role':user.role,
+                        'section':user_userDoc.section,
+                    })
+                return CustomResponse(self, status_code=200, errors=[], message="", data=data, status=status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class userProfileApi(APIView):
     permission_classes=(IsAuthenticated,)
