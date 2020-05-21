@@ -39,4 +39,7 @@ urlpatterns = [
     # token urls
     path('api/login/',TokenObtainPairView.as_view(),name='TokenObtainPairView'),
     path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),
+    #==============================================
+    # route to Customize Token
+    #path('api/',)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
