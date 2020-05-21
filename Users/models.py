@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import User
 from django.conf import settings
+from school.validators import *
 
 #############################
 #role
@@ -99,8 +100,8 @@ class userDoc(models.Model):
     section = models.CharField(max_length=2,choices=section_choices,default=employee)
 
     class Meta:
-        unique_together = ('user','personalCode',)
+        unique_together = ('user','nationalCode',)
 
 class Images(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='uploads',blank=False,null=True)
+    image = models.ImageField(upload_to='uploads',blank=False,null=True,validators=[validate_image_size,])
