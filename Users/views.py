@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,8 +15,8 @@ class userProfileApi(APIView):
     def get(self , request):
         try:
             user_id = request.GET['user_id']
-            if User.objects.all().filter(id = user_id).exists():
-                temp_user = User.objects.get(id = user_id)
+            if MyUser.objects.all().filter(id = user_id).exists():
+                temp_user = MyUser.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
                 return CustomResponse(self, status_code=200, errors=[], message="", data={"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
                 "role":temp_user.role}, status=status.HTTP_200_OK)
@@ -53,7 +52,7 @@ class ImageApi(APIView):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
             user_id = request.data['user_id']
-            if User.objects.all().filter(id = user_id).exists():
+            if MyUser.objects.all().filter(id = user_id).exists():
                 if serializer.is_valid():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors=[], message="عکس با موفقیت اپلود شد", data=str(serializer.instance.image), status=status.HTTP_200_OK)
@@ -74,8 +73,8 @@ class UserApi(APIView):
     def get(self ,request):
         try:
             user_id = request.GET['user_id']
-            if User.objects.all().filter(id = user_id).exists():
-                temp_user = User.objects.get(id = user_id)
+            if MyUser.objects.all().filter(id = user_id).exists():
+                temp_user = MyUser.objects.get(id = user_id)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user)
@@ -89,8 +88,8 @@ class UserApi(APIView):
     def put(self , request):
         try:
             user_id = request.GET['user_id']
-            if User.objects.all().filter(id = user_id).exists():
-                temp_user = User.objects.get(id = user_id)
+            if MyUser.objects.all().filter(id = user_id).exists():
+                temp_user = MyUser.objects.get(id = user_id)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.UserSerializer(temp_user, data=request.data)
@@ -108,8 +107,8 @@ class UserApi(APIView):
     def delete(self , request):
         try:
             user_id = request.GET['user_id']
-            if User.objects.all().filter(id = user_id).exists():
-                User.objects.get(id = user_id).delete()
+            if MyUser.objects.all().filter(id = user_id).exists():
+                MyUser.objects.get(id = user_id).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="کاربر با موفقیت حذف شد", data="", status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -160,7 +159,7 @@ class registerUserApi(APIView):
         try:
             serializer = serializers.UserRegisterSerializer(data = request.data)
             if serializer.is_valid():
-                new_user = User()
+                new_user = MyUser()
 
                 new_user.username = serializer.data.get('nationalCode')
                 new_user.first_name = serializer.data.get('first_name')
