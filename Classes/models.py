@@ -11,7 +11,6 @@ class Classes(models.Model):
 
 class UserClass(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    userClass = models.ForeignKey(Classes,on_delete=models.CASCADE)
-
+    userClass = models.ForeignKey(Classes,on_delete=models.CASCADE,unique=True)
     class Meta:
         unique_together = ['user','userClass']

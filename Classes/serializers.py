@@ -15,7 +15,7 @@ class ClassSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class UserClassesSerializer(serializers.ModelSerializer):
+class UserClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserClass
         fields = '__all__'
