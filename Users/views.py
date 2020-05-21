@@ -20,7 +20,7 @@ class userProfileApi(APIView):
                 temp_user = User.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
                 return CustomResponse(self, status_code=200, errors=[], message="", data={"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
-                "role":temp_userDoc.role}, status=status.HTTP_200_OK)
+                "role":temp_user.role}, status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
                 message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -166,6 +166,7 @@ class registerUserApi(APIView):
                 new_user.first_name = serializer.data.get('first_name')
                 new_user.last_name = serializer.data.get('last_name')
                 new_user.email = serializer.data.get('email')
+                new_user.role = serializer.data.get('role')
                 new_user.set_password(serializer.data.get('nationalCode'))
                 new_user.save()
 
@@ -177,7 +178,7 @@ class registerUserApi(APIView):
                 father_jobName=serializer.data.get('father_jobName'),father_jobAddress=serializer.data.get('father_jobAddress'),father_job_pNum=serializer.data.get('father_job_pNum'),
                 mother_nationalCode=serializer.data.get('mother_nationalCode'),mother_name=serializer.data.get('mother_name'),mother_pNum=serializer.data.get('mother_pNum'),
                 mother_jobName=serializer.data.get('mother_jobName'),mother_jobAddress=serializer.data.get('mother_jobAddress'),mother_job_pNum=serializer.data.get('mother_job_pNum'),
-                citizen_Num=serializer.data.get('citizen_Num'),date_of_birth=serializer.data.get('date_of_birth'),place_of_birth=serializer.data.get('place_of_birth'),role=serializer.data.get('role'),
+                citizen_Num=serializer.data.get('citizen_Num'),date_of_birth=serializer.data.get('date_of_birth'),place_of_birth=serializer.data.get('place_of_birth'),
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
                 new_userDoc.save()
 
