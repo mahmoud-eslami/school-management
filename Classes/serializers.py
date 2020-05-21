@@ -14,3 +14,8 @@ class ClassSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name' ,instance.name)
         instance.save()
         return instance
+
+class UserClassesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserClass
+        fields = '__all__'
