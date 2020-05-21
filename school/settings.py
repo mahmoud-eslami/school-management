@@ -29,6 +29,8 @@ DEBUG = True
 #Allowed Host
 ALLOWED_HOSTS = ['localhost','db','schooldb-novinschool.fandogh.cloud','myrest-novinschool.fandogh.cloud','9558de00.ngrok.io','a8703554.ngrok.io']
 
+# user custom model for user
+AUTH_USER_MODEL = 'Users.MyUser'
 # this line allowed other app that run on local host to access to apis
 CORS_ORIGIN_ALLOW_ALL = True
 #simpleJWT settings
@@ -171,7 +173,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-#AUTH_USER_MODEL = 'api.User'
 
 
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
