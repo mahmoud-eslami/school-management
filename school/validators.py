@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 import os
-from .validators import validate_file_extension
+
 
 def validate_image_size(image):
     imagesize = image.size
@@ -19,5 +19,5 @@ def validate_file_size (file):
 def format_file(file) :
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
     valid_extensions = ['.pdf', '.doc', '.docx', '.dotx','.html', '.png', '.xlsx', '.xls']
-    if not ext.lower() in valid_extensions
+    if not ext.lower() in valid_extensions :
         raise ValidationError('Unsupported file extension.')

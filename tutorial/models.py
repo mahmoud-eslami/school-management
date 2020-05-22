@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from school.validators import *
 
 
 pv = "0"
@@ -35,7 +35,7 @@ class Tutrial (models.Model):
 
 class file (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    image = models.FileField(upload_to='uploads',blank=False,null=True,validators=[validate_file_extension])
+    file = models.FileField(upload_to='uploads',blank=False,null=True,validators=[validate_file_size , format_file ])
 
 
 

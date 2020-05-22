@@ -123,22 +123,22 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+  #  'default': {
     #    'ENGINE': 'django.db.backends.sqlite3',
     #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-         'ENGINE': 'django.db.backends.mysql',
-         'OPTIONS': {
-            'read_default_file': './my.cnf',
-        },
-    }
-     #'default': {
-    #    'ENGINE': 'django.db.backends.mysql',
-    #    'NAME': 'school',
-    #    'USER': 'root',
-    #    'PASSWORD': 'mahmoud1998',
-    #    'HOST': 'db',
-    #    'PORT': '3306',
-    #},
+     #    'ENGINE': 'django.db.backends.mysql',
+      #   'OPTIONS': {
+      #      'read_default_file': './my.cnf',
+     #   },
+  #  }
+     'default': {
+             'ENGINE': 'django.db.backends.mysql',
+              'NAME': 'school',
+               'USER': 'root',
+              'PASSWORD': '!qaz@wsx#edc',
+                'HOST': 'localhost',
+              'PORT': '3308',
+    },
 }
 
 
