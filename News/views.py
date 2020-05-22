@@ -47,7 +47,7 @@ class NewsApi(APIView):
     ########################## get method for recieve seprate news
     def get(self , request):
         try:
-            id = request.user.id
+            id = request.GET['id']
             if News.objects.all().filter(id = id).exists():
                 news = News.objects.get(id = id)
             else:
