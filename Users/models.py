@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,AbstractUser
 from django.conf import settings
 from school.validators import *
 
@@ -63,9 +63,11 @@ section_choices = [
 ]
 #############################
 
+class MyUser(AbstractUser):
+    role = models.CharField(max_length=1,choices=role_choices,default=MODERATION)
 
 class userDoc(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doc')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doc')
     uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     religion = models.CharField(max_length=100,blank=False,null=True)
     userPhoto = models.CharField(max_length=250,blank=True,null=True)
@@ -94,7 +96,6 @@ class userDoc(models.Model):
     citizen_Num = models.CharField(max_length=11,blank=True,null=True)
     date_of_birth = models.CharField(max_length=50,blank=False,null=True)
     place_of_birth = models.CharField(max_length=50,blank=False,null=True)
-    role = models.CharField(max_length=1,choices=role_choices,default=STUDENT)
     citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
     gender = models.CharField(max_length=1,choices=gender_choices,default=MAN)
     section = models.CharField(max_length=2,choices=section_choices,default=employee)
@@ -103,5 +104,6 @@ class userDoc(models.Model):
         unique_together = ('user','nationalCode',)
 
 class Images(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploads',blank=False,null=True,validators=[validate_image_size,])

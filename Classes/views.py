@@ -24,5 +24,17 @@ class GetAllClasses(APIView):
             message = str(e) + ' ' + str(trace_back)
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class GetAllUserClasses(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self , request):
+        try:
+            temp_userClass = UserClass.objects.all()
+            serializer = serializers.UserClassSerializer(temp_userClass,many=True)
+            return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class ClassesApi(APIView):
     pass

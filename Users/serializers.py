@@ -9,18 +9,12 @@ class ImageSerilizer(serializers.Serializer):
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
 
-    def update(self , instance , validated_data):
-        instance.image = validated_data.get('image' , instance.image)
-        instance.save()
-        return instance
-
-class UserSerializer(serializers.Serializer):
-    id = serializers.CharField(read_only=True,max_length=5)
-    username = serializers.CharField(read_only=True,allow_null=False,allow_blank=True,max_length=20)
-    first_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
-    last_name = serializers.CharField(allow_null=False,allow_blank=True,max_length=20)
-    email = serializers.EmailField(allow_null=False,allow_blank=True,max_length=20)
-    date_joined = serializers.DateTimeField(read_only=True)
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        read_only_fields = ['username']
+        exclude = ['password','last_login','is_superuser'
+        ,'is_staff','is_active','groups','user_permissions']
 
     def create(self , validated_data):
         return User.objects.create(**validated_data)
@@ -29,24 +23,24 @@ class UserSerializer(serializers.Serializer):
         instance.first_name = validated_data.get('first_name' , instance.first_name)
         instance.last_name = validated_data.get('last_name' , instance.last_name)
         instance.email = validated_data.get('email' , instance.email)
+        instance.role = validated_data.get('role' , instance.role)
         instance.save()
         return instance
 
 
 class UserDocSerializer(serializers.Serializer):
     user_id = serializers.CharField(read_only=True)
-    role = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
     uuid = serializers.UUIDField(read_only=True)
-    religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=True)
+    religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userIdCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
-    user_pNum = serializers.CharField(max_length=11,allow_blank=False,allow_null=True)
-    home_pNum = serializers.CharField(max_length=11,allow_blank=False,allow_null=True)
+    user_pNum = serializers.CharField(max_length=11,allow_blank=False,allow_null=False)
+    home_pNum = serializers.CharField(max_length=11,allow_blank=False,allow_null=False)
     address = serializers.CharField(max_length=250,allow_null=True,allow_blank=False)
-    zipCode = serializers.CharField(max_length=10,allow_blank=False,allow_null=True)
-    personalCode = serializers.CharField(max_length=10,allow_null=True,allow_blank=False)
-    nationalCode = serializers.CharField(max_length=10,allow_blank=False,allow_null=True)
+    zipCode = serializers.CharField(max_length=10,allow_blank=False,allow_null=False)
+    personalCode = serializers.CharField(max_length=10,allow_null=False,allow_blank=False)
+    nationalCode = serializers.CharField(max_length=10,allow_blank=False,allow_null=False)
     father_nationalCode = serializers.CharField(max_length=10,allow_blank=True,allow_null=True)
     father_name = serializers.CharField(max_length=40,allow_blank=True,allow_null=True)
     father_pNum = serializers.CharField(max_length=11,allow_blank=True,allow_null=True)
@@ -62,11 +56,11 @@ class UserDocSerializer(serializers.Serializer):
     mother_job_pNum = serializers.CharField(max_length=11,allow_blank=True,allow_null=True)
     mother_job_postalCode = serializers.CharField(max_length=10,allow_blank=True,allow_null=True)
     citizen_Num = serializers.CharField(max_length=11,allow_blank=True,allow_null=True)
-    date_of_birth = serializers.CharField(max_length=50,allow_blank=False,allow_null=True)
-    place_of_birth = serializers.CharField(max_length=50,allow_blank=False,allow_null=True)
-    citizen = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
-    gender = serializers.CharField(max_length=1,allow_blank=False,allow_null=True)
-    section = serializers.CharField(max_length=2,allow_blank=False,allow_null=True)
+    date_of_birth = serializers.CharField(max_length=50,allow_blank=False,allow_null=False)
+    place_of_birth = serializers.CharField(max_length=50,allow_blank=False,allow_null=False)
+    citizen = serializers.CharField(max_length=1,allow_blank=False,allow_null=False)
+    gender = serializers.CharField(max_length=1,allow_blank=False,allow_null=False)
+    section = serializers.CharField(max_length=2,allow_blank=False,allow_null=False)
 
     def create(self , validated_data):
         return userDoc.objects.create(**validated_data)
