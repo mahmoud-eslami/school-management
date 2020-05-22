@@ -14,11 +14,7 @@ class GetAllUserInfo(APIView):
         try:
             role = request.user.role
             if role == '4':
-                return CustomResponse(self,
-                status_code=403,
-                errors=["شما دسترسی به این بخش را ندارید"],
-                message="", data="",
-                status=status.HTTP_403_FORBIDDEN)
+                return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
             else:
                 temp_users = MyUser.objects.all()
                 data = []

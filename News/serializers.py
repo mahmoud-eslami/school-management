@@ -10,7 +10,7 @@ class NewsSerializer(serializers.Serializer):
     content = serializers.CharField(max_length=5000,allow_blank=False,allow_null=False)
     author_id = serializers.CharField(max_length=10,allow_null=True,allow_blank=False)
     pic = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
-    release_date = serializers.DateTimeField(read_only=True)
+    release_date = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
 
     def create(self , validated_data):
         return News.objects.create(**validated_data)
@@ -18,6 +18,7 @@ class NewsSerializer(serializers.Serializer):
     def update(self ,instance , validated_data):
         instance.title = validated_data.get('title' , instance.title)
         instance.content = validated_data.get('content' , instance.content)
-        instance.pic = validated_data.get('title' , instance.pic)
+        instance.pic = validated_data.get('pic' , instance.pic)
+        instance.release_date = validated_data.get('release_date' , instance.release_date)
         instance.save()
         return instance
