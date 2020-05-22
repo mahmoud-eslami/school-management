@@ -8,8 +8,6 @@ import traceback
 from . import serializers
 from school.methods import *
 
-#user_id , codeMeli , section, first_name, last_name, role
-
 class GetAllUserInfo(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self , request):
@@ -46,7 +44,7 @@ class userProfileApi(APIView):
     #################################### get method for find specific user profile
     def get(self , request):
         try:
-            user_id = request.GET['user_id']
+            user_id = request.user.id
             if MyUser.objects.all().filter(id = user_id).exists():
                 temp_user = MyUser.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
@@ -66,12 +64,12 @@ class ImageApi(APIView):
     #################################### get method for find specific user images
     def get(self , request):
         try:
-            user_id = request.GET['user_id']
+            user_id = request.user.id
             image_list = []
             if Images.objects.all().filter(user_id = user_id).exists():
                 image_list = Images.objects.all().filter(user_id = user_id)
             else:
-                return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
+                return CustomResponse(self, status_code=406, errors=["عکسی توسط این کاربر ثبت نشده."],
                 message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.ImageSerilizer(image_list , many=True)
             return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
@@ -83,7 +81,7 @@ class ImageApi(APIView):
     def post(self , request):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
-            user_id = request.data['user_id']
+            user_id = request.user.id
             if MyUser.objects.all().filter(id = user_id).exists():
                 if serializer.is_valid():
                     serializer.save()

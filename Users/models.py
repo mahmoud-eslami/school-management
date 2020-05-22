@@ -64,7 +64,7 @@ section_choices = [
 #############################
 
 class MyUser(AbstractUser):
-    role = models.CharField(max_length=1,choices=role_choices,default=STUDENT)
+    role = models.CharField(max_length=1,choices=role_choices,default=MODERATION)
 
 class userDoc(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doc')
@@ -104,5 +104,6 @@ class userDoc(models.Model):
         unique_together = ('user','nationalCode',)
 
 class Images(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploads',blank=False,null=True,validators=[validate_image_size,])

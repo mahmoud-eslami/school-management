@@ -9,11 +9,6 @@ class ImageSerilizer(serializers.Serializer):
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
 
-    def update(self , instance , validated_data):
-        instance.image = validated_data.get('image' , instance.image)
-        instance.save()
-        return instance
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser

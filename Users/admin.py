@@ -11,7 +11,7 @@ class CustomDoc(admin.ModelAdmin):
 
 @admin.register(Images)
 class CustomImages(admin.ModelAdmin):
-    list_display = ['user_id','image']
+    list_display = ['id','user_id','image']
 
 @admin.register(MyUser)
 class CustomUser(BaseUserAdmin):
