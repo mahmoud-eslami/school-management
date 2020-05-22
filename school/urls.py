@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView,)
+from Token.views import CustomTokenObtainPairView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -33,7 +34,11 @@ urlpatterns = [
     # this urls route you to Users app urls.py
     path('News/App/' , include('News.urls')),
     #==============================================
+    # this urls route you to Users app urls.py
+    path('Classes/App/' , include('Classes.urls')),
+    #==============================================
     # token urls
-    path('api/login/',TokenObtainPairView.as_view(),name='TokenObtainPairView'),
+    path('api/login/',CustomTokenObtainPairView.as_view(),name='TokenObtainPairView'),
     path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),
+    #==============================================
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
