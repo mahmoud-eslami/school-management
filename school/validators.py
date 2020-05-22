@@ -17,7 +17,7 @@ def validate_file_size (file):
         return file
 
 def format_file(file) :
-    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    ext = os.path.splitext(file.name)[1]  # [0] returns path+filename
     valid_extensions = ['.pdf', '.doc', '.docx', '.dotx','.html', '.png', '.xlsx', '.xls']
     if not ext.lower() in valid_extensions :
         raise ValidationError('Unsupported file extension.')
