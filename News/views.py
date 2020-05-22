@@ -15,11 +15,11 @@ class NewsApi(APIView):
     ########################## get method for recieve seprate news
     def get(self , request):
         try:
-            id = request.GET['id']
+            id = request.user.id
             if News.objects.all().filter(id = id).exists():
                 news = News.objects.get(id = id)
             else:
-                return CustomResponse(self, status_code=406, errors=["خبر با این ایدی موجود نیست"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["خبر با این مشخصات وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.NewsSerializer(news)
             return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -50,7 +50,7 @@ class NewsApi(APIView):
             if News.objects.all().filter(id = id).exists():
                 news = News.objects.get(id = id)
             else:
-                return CustomResponse(self, status_code=406, errors=["خبر با این ایدی موجود نیست"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["خبر با این مشخصات وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             news.delete()
             return CustomResponse(self, status_code=200, errors="", message="خبر با موفقیت حذف شد", data=[], status=status.HTTP_200_OK)
         except Exception as e:
@@ -65,7 +65,7 @@ class NewsApi(APIView):
             if News.objects.all().filter(id = id).exists():
                 news = News.objects.get(id = id)
             else:
-                return CustomResponse(self, status_code=406, errors=["خبر با این ایدی موجود نیست"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["خبر با این مشخصات وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = serializers.NewsSerializer(news,data = request.data)
             if serializer.is_valid():
                 serializer.save()
