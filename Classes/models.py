@@ -10,8 +10,7 @@ class Classes(models.Model):
         return str(self.id)
 
 class UserClass(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     userClass = models.ForeignKey(Classes,on_delete=models.CASCADE)
-
     class Meta:
         unique_together = ['user','userClass']

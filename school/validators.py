@@ -7,14 +7,14 @@ def validate_image_size(image):
     if imagesize > 2621440:
         raise ValidationError("حجم عکس حداکثر می‌تواند 2.5 مگابایت باشد.")
     else:
-        return value
+        return image
 
 def validate_file_size (file):
     file_size = file.size
     if file_size > 10485760 :
         raise validate_file_size("حداکثر حجم فایل شما 10 مگابایت می تواند باشد!")
     else:
-        return value
+        return file
 
 def format_file(file) :
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename

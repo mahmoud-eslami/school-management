@@ -74,8 +74,9 @@ INSTALLED_APPS = [
     'Users',
     'News',
     'Classes',
+    'Token',
     'tutorial',
-]
+    ]
 
 MIDDLEWARE = [
 # allow other apps to access to api
