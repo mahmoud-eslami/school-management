@@ -14,10 +14,8 @@ class GetAllUserInfo(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self , request):
         try:
-            # get user id the sender of request to check his permission
-            user_id = request.GET['user_id']
-            requsted_user = MyUser.objects.get(id = user_id)
-            if requsted_user.role == '4':
+            role = request.user.role
+            if role == '4':
                 return CustomResponse(self,
                 status_code=403,
                 errors=["شما دسترسی به این بخش را ندارید"],
