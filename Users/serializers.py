@@ -2,30 +2,16 @@ from rest_framework import serializers
 from .models import *
 from school.validators import *
 
+class ChangePasswordInProfileSerilizer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
+    new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
+
 class ImageSerilizer(serializers.Serializer):
     user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
     image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True,validators=[validate_image_size,])
 
     def create(self , validated_data):
         return Images.objects.create(**validated_data)
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MyUser
-        read_only_fields = ['username']
-        exclude = ['password','last_login','is_superuser'
-        ,'is_staff','is_active','groups','user_permissions']
-
-    def create(self , validated_data):
-        return User.objects.create(**validated_data)
-
-    def update(self , instance , validated_data):
-        instance.first_name = validated_data.get('first_name' , instance.first_name)
-        instance.last_name = validated_data.get('last_name' , instance.last_name)
-        instance.email = validated_data.get('email' , instance.email)
-        instance.role = validated_data.get('role' , instance.role)
-        instance.save()
-        return instance
 
 
 class UserDocSerializer(serializers.Serializer):
@@ -99,6 +85,26 @@ class UserDocSerializer(serializers.Serializer):
         instance.section = validated_data.get('section' , instance.section)
         instance.save()
         return instance
+
+class UserSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(max_length=1,allow_blank=False,allow_null=False)
+    class Meta:
+        model = MyUser
+        exclude = ['password','last_login','is_superuser'
+        ,'is_staff','is_active','groups','user_permissions']
+
+    def create(self , validated_data):
+        return User.objects.create(**validated_data)
+
+    def update(self , instance , validated_data):
+        instance.username = validated_data.get('username' , instance.username)
+        instance.first_name = validated_data.get('first_name' , instance.first_name)
+        instance.last_name = validated_data.get('last_name' , instance.last_name)
+        instance.email = validated_data.get('email' , instance.email)
+        instance.role = validated_data.get('role' , instance.role)
+        instance.save()
+        return instance
+
 
 # serialize data for register a new user
 class UserRegisterSerializer(serializers.Serializer):

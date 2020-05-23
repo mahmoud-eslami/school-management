@@ -8,6 +8,51 @@ import traceback
 from . import serializers
 from school.methods import *
 
+class ChangePassInProfile(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self , request):
+        try:
+            user_id = request.user.id
+            temp_user = MyUser.objects.get(id = user_id)
+            serializer = serializers.ChangePasswordInProfileSerilizer(data = request.data)
+            if serializer.is_valid():
+                old_password = serializer.data.get('old_password')
+                new_password = serializer.data.get('new_password')
+                user_password = temp_user.password
+                if temp_user.check_password(old_password):
+                    temp_user.set_password(new_password)
+                    temp_user.save()
+                    return CustomResponse(self, status_code=200, errors=["رمز عبور با موفقیت تغییر کرد ."], message="", data="", status=status.HTTP_200_OK)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["رمز عبور وارد شده با رمز عبور قبلی برابر نیست."], message=a, data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class GetSpecificUserAndDoc(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self , request):
+        try:
+            role = request.user.role
+            user_id = request.GET['user_id']
+            if role == '4' or role == '3':
+                return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
+            else:
+                # if later make bug write this part like shit with append in a list
+                temp_users = MyUser.objects.get(id = user_id)
+                temp_userDocs = userDoc.objects.get(user_id = user_id)
+                user_serializer = serializers.UserSerializer(temp_users)
+                userDoc_serializer = serializers.UserDocSerializer(temp_userDocs)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=[user_serializer.data,userDoc_serializer.data], status=status.HTTP_200_OK)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class GetAllUserInfo(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self , request):
