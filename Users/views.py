@@ -33,26 +33,6 @@ class ChangePassInProfile(APIView):
             message = str(e) + ' ' + str(trace_back)
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class GetSpecificUserAndDoc(APIView):
-    permission_classes=(IsAuthenticated,)
-    def get(self , request):
-        try:
-            role = request.user.role
-            user_id = request.GET['user_id']
-            if role == '4' or role == '3':
-                return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
-            else:
-                # if later make bug write this part like shit with append in a list
-                temp_users = MyUser.objects.get(id = user_id)
-                temp_userDocs = userDoc.objects.get(user_id = user_id)
-                user_serializer = serializers.UserSerializer(temp_users)
-                userDoc_serializer = serializers.UserDocSerializer(temp_userDocs)
-                return CustomResponse(self, status_code=200, errors=[], message="", data=[user_serializer.data,userDoc_serializer.data], status=status.HTTP_200_OK)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 class GetAllUserInfo(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self , request):
