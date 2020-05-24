@@ -37,8 +37,11 @@ urlpatterns = [
     # this urls route you to Users app urls.py
     path('Classes/App/' , include('Classes.urls')),
     #==============================================
+    #upload a file for tutorial
+    path('tutorial/upload/', include('uploadapp.urls')),
     # token urls
     path('api/login/',CustomTokenObtainPairView.as_view(),name='TokenObtainPairView'),
     path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),
     #==============================================
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
