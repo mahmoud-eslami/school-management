@@ -2,12 +2,13 @@ from rest_framework import serializers
 from .models import *
 
 class TutorialSerilizer(serializers.ModelSerializer):
-
     class Meta :
         model = Tutrial
-        field = '__all__'
+        fields = '__all__'
+        read_only_fields = ['writer']
+
     def create(self , validated_data):
-        return User.objects.create(**validated_data)
+        return Tutrial.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
         instance.title = validated_data.get('title' , instance.title)
