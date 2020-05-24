@@ -36,29 +36,33 @@ class ChangePassInProfile(APIView):
 
 class UpdateUserAndUserDoc(APIView):
     permission_classes=(IsAuthenticated,)
-    def post(self , request):
+    def put(self , request):
         try:
-            user_id = request.GET['user_id']
-            if MyUser.objects.all().filter(id = user_id).exists():
-                temp_user = MyUser.objects.get(id = user_id)
-                temp_userDoc = userDoc.objects.get(user_id = user_id)
+            role = request.user.role
+            if role == '4' and role == '3':
+                return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
             else:
-                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-            user_serializer = serializers.UserSerializer(temp_user, data=request.data)
-            userDoc_serializer = serializers.UserDocSerializer(temp_userDoc, data=request.data)
-            if user_serializer.is_valid():
-                if userDoc_serializer.is_valid():
-                    user_serializer.save()
-                    userDoc_serializer.save()
-                    temp_user.username = userDoc_serializer.data.get('nationalCode')
-                    temp_user.save()
-                    return CustomResponse(self, status_code=200, errors=[], message="اطلاعات کاربر بروزرسانی شد", data="", status=status.HTTP_200_OK)
+                user_id = request.GET['user_id']
+                if MyUser.objects.all().filter(id = user_id).exists():
+                    temp_user = MyUser.objects.get(id = user_id)
+                    temp_userDoc = userDoc.objects.get(user_id = user_id)
                 else:
-                    message = userDoc_serializer.errors
+                    return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                user_serializer = serializers.UserSerializer(temp_user, data=request.data)
+                userDoc_serializer = serializers.UserDocSerializer(temp_userDoc, data=request.data)
+                if user_serializer.is_valid():
+                    if userDoc_serializer.is_valid():
+                        user_serializer.save()
+                        userDoc_serializer.save()
+                        temp_user.username = userDoc_serializer.data.get('nationalCode')
+                        temp_user.save()
+                        return CustomResponse(self, status_code=200, errors=[], message="اطلاعات کاربر بروزرسانی شد", data="", status=status.HTTP_200_OK)
+                    else:
+                        message = userDoc_serializer.errors
+                        return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+                else:
+                    message = user_serializer.errors
                     return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
-            else:
-                message = user_serializer.errors
-                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -96,12 +100,19 @@ class userProfileApi(APIView):
     #################################### get method for find specific user profile
     def get(self , request):
         try:
-            user_id = request.user.id
+            user_id = request.GET['user_id']
             if MyUser.objects.all().filter(id = user_id).exists():
                 temp_user = MyUser.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
-                return CustomResponse(self, status_code=200, errors=[], message="", data={"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
-                "role":temp_user.role}, status=status.HTTP_200_OK)
+                data = []
+                data.append({
+                    'first_name':temp_user.first_name,
+                    'userPhoto':temp_userDoc.userPhoto,
+                    'role':temp_user.role,
+                    'last_name':temp_user.last_name,
+                    'id':temp_user.id,
+                })
+                return CustomResponse(self, status_code=200, errors=[], message="", data=data, status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
                 message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)

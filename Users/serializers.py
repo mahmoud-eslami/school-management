@@ -35,7 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDocSerializer(serializers.Serializer):
     user = UserSerializer(read_only=True)
     user_id = serializers.CharField(read_only=True)
-    uuid = serializers.UUIDField(read_only=True)
     religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
