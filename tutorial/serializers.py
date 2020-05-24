@@ -14,6 +14,6 @@ class TutorialSerilizer(serializers.ModelSerializer):
         instance.content = validated_data.get('content' , instance.content)
         instance.writer = validated_data.get('writer' , instance.writer)
         instance.ttype = validated_data.get('ttype' , instance.ttype)
-        #instance.image = validated_data.get('image' , instance.image)
+        instance.tfile = validated_data.get('tfile' , instance.tfile)
         instance.save()
         return instance

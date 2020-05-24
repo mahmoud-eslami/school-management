@@ -7,11 +7,7 @@ from django.conf import Settings
 pv = "0"
 public = "1"
 #==========
-#role
-MODERATION = '0'
-KARKONAN = '0'
-MOALEM = '1'
-DANESH_AMOOZ = '1'
+
 
 #====================================
 #section choice for post massage for all user or specefic user
@@ -29,7 +25,7 @@ class Tutrial (models.Model):
     content = models.CharField(max_length=250 , blank= False , null = True)
     writer  = models.ForeignKey(Settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='author')
     ttype = models.CharField(choices= post_type_choice,max_length = 1, blank = False ,default= public)
-    image = models.CharField(max_length= 250 , blank= True, null = True)
+    tfile = models.CharField(max_length= 250 , blank= True, null = True)
 
 
 
