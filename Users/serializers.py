@@ -19,12 +19,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         exclude = ['password','last_login','is_superuser'
         ,'is_staff','is_active','groups','user_permissions']
+        read_only_fields = ['username']
 
     def create(self , validated_data):
         return User.objects.create(**validated_data)
 
     def update(self , instance , validated_data):
-        instance.username = validated_data.get('username' , instance.username)
         instance.first_name = validated_data.get('first_name' , instance.first_name)
         instance.last_name = validated_data.get('last_name' , instance.last_name)
         instance.email = validated_data.get('email' , instance.email)
