@@ -37,6 +37,10 @@ urlpatterns = [
     # this urls route you to Users app urls.py
     path('Classes/App/' , include('Classes.urls')),
     #==============================================
+    #==============================================
+    # this urls route you to Tutorial app urls.py
+    path('Tutorial/App/' , include('tutorial.urls')),
+    #==============================================
     # token urls
     path('api/login/',CustomTokenObtainPairView.as_view(),name='TokenObtainPairView'),
     path('api/token/refresh/',TokenRefreshView.as_view(),name='TokenRefreshView'),

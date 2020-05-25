@@ -2,6 +2,10 @@ from rest_framework import serializers
 from .models import *
 from school.validators import *
 
+class ChangePasswordInProfileSerilizer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
+    new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
+
 class ImageSerilizer(serializers.Serializer):
     user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
     image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True,validators=[validate_image_size,])
@@ -10,11 +14,12 @@ class ImageSerilizer(serializers.Serializer):
         return Images.objects.create(**validated_data)
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(max_length=1,allow_blank=False,allow_null=False)
     class Meta:
         model = MyUser
-        read_only_fields = ['username']
         exclude = ['password','last_login','is_superuser'
         ,'is_staff','is_active','groups','user_permissions']
+        read_only_fields = ['username']
 
     def create(self , validated_data):
         return User.objects.create(**validated_data)
@@ -27,10 +32,9 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
 class UserDocSerializer(serializers.Serializer):
+    user = UserSerializer(read_only=True)
     user_id = serializers.CharField(read_only=True)
-    uuid = serializers.UUIDField(read_only=True)
     religion = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     userPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)
     userNationalCardPhoto = serializers.CharField(max_length=250,allow_blank=True,allow_null=True)

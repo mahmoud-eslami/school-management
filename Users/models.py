@@ -99,7 +99,7 @@ class userDoc(models.Model):
     citizen = models.CharField(max_length=1,default=IRAN,choices=citizen_choices)
     gender = models.CharField(max_length=1,choices=gender_choices,default=MAN)
     section = models.CharField(max_length=2,choices=section_choices,default=employee)
-
+#========================================
     class Meta:
         unique_together = ('user','nationalCode',)
 

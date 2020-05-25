@@ -3,12 +3,14 @@ from  django.contrib.auth.models import User
 from datetime import datetime
 from .models import *
 from school.validators import validate_image_size
+from Users.serializers import *
 
 class NewsSerializer(serializers.Serializer):
+    author = UserSerializer(read_only=True)
     id = serializers.CharField(read_only=True,allow_null=True,allow_blank=True,max_length=10)
     title = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     content = serializers.CharField(max_length=5000,allow_blank=False,allow_null=False)
-    author_id = serializers.CharField(max_length=10,allow_null=True,allow_blank=False,read_only=True)
+    author_id = serializers.CharField(max_length=10,allow_null=False,allow_blank=True)
     pic = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
     release_date = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
 

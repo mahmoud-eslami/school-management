@@ -8,6 +8,66 @@ import traceback
 from . import serializers
 from school.methods import *
 
+
+class ChangePassInProfile(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self , request):
+        try:
+            user_id = request.user.id
+            temp_user = MyUser.objects.get(id = user_id)
+            serializer = serializers.ChangePasswordInProfileSerilizer(data = request.data)
+            if serializer.is_valid():
+                old_password = serializer.data.get('old_password')
+                new_password = serializer.data.get('new_password')
+                user_password = temp_user.password
+                if temp_user.check_password(old_password):
+                    temp_user.set_password(new_password)
+                    temp_user.save()
+                    return CustomResponse(self, status_code=200, errors=["رمز عبور با موفقیت تغییر کرد ."], message="", data="", status=status.HTTP_200_OK)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["رمز عبور وارد شده با رمز عبور قبلی برابر نیست."], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UpdateUserAndUserDoc(APIView):
+    permission_classes=(IsAuthenticated,)
+    def put(self , request):
+        try:
+            role = request.user.role
+            if role == '4' and role == '3':
+                return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
+            else:
+                user_id = request.GET['user_id']
+                if MyUser.objects.all().filter(id = user_id).exists():
+                    temp_user = MyUser.objects.get(id = user_id)
+                    temp_userDoc = userDoc.objects.get(user_id = user_id)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                user_serializer = serializers.UserSerializer(temp_user, data=request.data)
+                userDoc_serializer = serializers.UserDocSerializer(temp_userDoc, data=request.data)
+                if user_serializer.is_valid():
+                    if userDoc_serializer.is_valid():
+                        user_serializer.save()
+                        userDoc_serializer.save()
+                        temp_user.username = userDoc_serializer.data.get('nationalCode')
+                        temp_user.save()
+                        return CustomResponse(self, status_code=200, errors=[], message="اطلاعات کاربر بروزرسانی شد", data="", status=status.HTTP_200_OK)
+                    else:
+                        message = userDoc_serializer.errors
+                        return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+                else:
+                    message = user_serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class GetAllUserInfo(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self , request):
@@ -40,12 +100,19 @@ class userProfileApi(APIView):
     #################################### get method for find specific user profile
     def get(self , request):
         try:
-            user_id = request.user.id
+            user_id = request.GET['user_id']
             if MyUser.objects.all().filter(id = user_id).exists():
                 temp_user = MyUser.objects.get(id = user_id)
                 temp_userDoc = userDoc.objects.get(user_id = user_id)
-                return CustomResponse(self, status_code=200, errors=[], message="", data={"first_name":temp_user.first_name,"userPhoto":temp_userDoc.userPhoto,
-                "role":temp_user.role}, status=status.HTTP_200_OK)
+                data = []
+                data.append({
+                    'first_name':temp_user.first_name,
+                    'userPhoto':temp_userDoc.userPhoto,
+                    'role':temp_user.role,
+                    'last_name':temp_user.last_name,
+                    'id':temp_user.id,
+                })
+                return CustomResponse(self, status_code=200, errors=[], message="", data=data, status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=["کاربر با این ایدی وجود ندارد"],
                 message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -201,7 +268,9 @@ class registerUserApi(APIView):
                 zipCode=serializer.data.get('zipCode'),personalCode=serializer.data.get('personalCode'),nationalCode=serializer.data.get('nationalCode'),
                 father_nationalCode=serializer.data.get('father_nationalCode'),father_name=serializer.data.get('father_name'),father_pNum=serializer.data.get('father_pNum'),
                 father_jobName=serializer.data.get('father_jobName'),father_jobAddress=serializer.data.get('father_jobAddress'),father_job_pNum=serializer.data.get('father_job_pNum'),
+                father_job_postalCode=serializer.data.get('father_job_postalCode'),
                 mother_nationalCode=serializer.data.get('mother_nationalCode'),mother_name=serializer.data.get('mother_name'),mother_pNum=serializer.data.get('mother_pNum'),
+                mother_job_postalCode=serializer.data.get('mother_job_postalCode'),
                 mother_jobName=serializer.data.get('mother_jobName'),mother_jobAddress=serializer.data.get('mother_jobAddress'),mother_job_pNum=serializer.data.get('mother_job_pNum'),
                 citizen_Num=serializer.data.get('citizen_Num'),date_of_birth=serializer.data.get('date_of_birth'),place_of_birth=serializer.data.get('place_of_birth'),
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
