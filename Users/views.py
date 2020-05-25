@@ -268,7 +268,9 @@ class registerUserApi(APIView):
                 zipCode=serializer.data.get('zipCode'),personalCode=serializer.data.get('personalCode'),nationalCode=serializer.data.get('nationalCode'),
                 father_nationalCode=serializer.data.get('father_nationalCode'),father_name=serializer.data.get('father_name'),father_pNum=serializer.data.get('father_pNum'),
                 father_jobName=serializer.data.get('father_jobName'),father_jobAddress=serializer.data.get('father_jobAddress'),father_job_pNum=serializer.data.get('father_job_pNum'),
+                father_job_postalCode=serializer.data.get('father_job_postalCode'),
                 mother_nationalCode=serializer.data.get('mother_nationalCode'),mother_name=serializer.data.get('mother_name'),mother_pNum=serializer.data.get('mother_pNum'),
+                mother_job_postalCode=serializer.data.get('mother_job_postalCode'),
                 mother_jobName=serializer.data.get('mother_jobName'),mother_jobAddress=serializer.data.get('mother_jobAddress'),mother_job_pNum=serializer.data.get('mother_job_pNum'),
                 citizen_Num=serializer.data.get('citizen_Num'),date_of_birth=serializer.data.get('date_of_birth'),place_of_birth=serializer.data.get('place_of_birth'),
                 citizen=serializer.data.get('citizen'),gender=serializer.data.get('gender'),section=serializer.data.get('section'))
