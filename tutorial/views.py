@@ -13,7 +13,7 @@ from rest_framework.parsers import FileUploadParser
 
 
 
-class getAlltutorial (APIView) : # inm url joda mikha ....
+class getAlltutorial (APIView) :
     permission_classes=(IsAuthenticated,)
     def get(self,request):
         try :
@@ -27,9 +27,9 @@ class getAlltutorial (APIView) : # inm url joda mikha ....
 
 class tutorialApi(APIView):
     permission_classes = (IsAuthenticated,)
-    def get (self, request) : # fix
+    def get (self, request) :
         try :
-            tutorial_id = request.GET['tutorial_id'] # fuck u
+            tutorial_id = request.GET['tutorial_id']
             if Tutrial.objects.all().filter(id = tutorial_id ).exists():
                 temp_tutoril = Tutrial.objects.get(id = tutorial_id)
                 serializer = serializers.TutorialSerilizer(temp_tutoril)
@@ -58,7 +58,7 @@ class tutorialApi(APIView):
                 return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    def delete(self , request): # fix
+    def delete(self , request): 
         try:
             id = request.GET['tutorial_id']
             if Tutrial.objects.all().filter(id = id).exists():
@@ -79,7 +79,7 @@ class tutorialApi(APIView):
                     temp_tutorial = Tutrial.objects.get(id = id)
                 else:
                     return CustomResponse(self, status_code=406, errors=["اموزش با این ایدی موجود نیست"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-                serializer = serializers.TutorialSerilizer(temp_tutorial,data=request.data)    
+                serializer = serializers.TutorialSerilizer(temp_tutorial,data=request.data)
                 if serializer.is_valid():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors="", message="اموزش با موفقیت اپدیت شد", data="", status=status.HTTP_200_OK)
@@ -90,7 +90,7 @@ class tutorialApi(APIView):
 
 class FileUploadView(APIView):
     permission_classes=(IsAuthenticated,)
-    parser_class = (FileUploadParser,) ##################what is thattttttttt
+    parser_class = (FileUploadParser,)
     def post(self, request):
         try:
             file_serializer = TutorialSerilizer(data=request.data)
