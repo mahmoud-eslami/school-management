@@ -17,7 +17,7 @@ class getAlltutorial (APIView) :
     permission_classes=(IsAuthenticated,)
     def get(self,request):
         try :
-            all_tutorial = Tutrial.objects.all()
+            all_tutorial = Tutorial.objects.all()
             serializer = serializers.serializer(all_tutorial , many = True)
             return CustomResponse(self, status_code=200, errors=[], message="", data =serializer.data, status=status.HTTP_200_OK)
         except Exception as e :
@@ -30,8 +30,8 @@ class tutorialApi(APIView):
     def get (self, request) :
         try :
             tutorial_id = request.GET['tutorial_id']
-            if Tutrial.objects.all().filter(id = tutorial_id ).exists():
-                temp_tutoril = Tutrial.objects.get(id = tutorial_id)
+            if Tutorial.objects.all().filter(id = tutorial_id ).exists():
+                temp_tutoril = Tutorial.objects.get(id = tutorial_id)
                 serializer = serializers.TutorialSerilizer(temp_tutoril)
                 return CustomResponse( self , status_code=200, errors=[], message="", data =serializer.data, status=status.HTTP_200_OK)
             else :
@@ -58,11 +58,11 @@ class tutorialApi(APIView):
                 return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    def delete(self , request): 
+    def delete(self , request):
         try:
             id = request.GET['tutorial_id']
-            if Tutrial.objects.all().filter(id = id).exists():
-                temp_tutorial  = Tutrial.objects.get(id = id)
+            if Tutorial.objects.all().filter(id = id).exists():
+                temp_tutorial  = Tutorial.objects.get(id = id)
                 temp_tutorial.delete()
                 return CustomResponse(self, status_code=200, errors="", message="اموزش با موفقیت حذف شد", data=[], status=status.HTTP_200_OK)
             else:
@@ -75,8 +75,8 @@ class tutorialApi(APIView):
     def put (self, request) :
             try :
                 id = request.GET['tutorial_id']
-                if Tutrial.objects.all().filter(id = id).exists():
-                    temp_tutorial = Tutrial.objects.get(id = id)
+                if Tutorial.objects.all().filter(id = id).exists():
+                    temp_tutorial = Tutorial.objects.get(id = id)
                 else:
                     return CustomResponse(self, status_code=406, errors=["اموزش با این ایدی موجود نیست"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
                 serializer = serializers.TutorialSerilizer(temp_tutorial,data=request.data)

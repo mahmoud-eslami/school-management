@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import  *
 
-@admin.register(Tutrial)
+@admin.register(Tutorial)
 class CustomToturial(admin.ModelAdmin):
     list_display=['id','title','ttype','tfile','writer']
 

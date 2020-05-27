@@ -18,7 +18,7 @@ post_type_choice = [
 
 #===================================
 
-class Tutrial (models.Model):
+class Tutorial (models.Model):
     # in theis class you can upload pdf for tutorial
     id = models.AutoField(primary_key = True)
     title = models.CharField(max_length=250,blank= False , null= True)

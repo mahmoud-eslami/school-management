@@ -3,7 +3,7 @@ from .models import *
 
 class TutorialSerilizer(serializers.ModelSerializer):
     class Meta :
-        model = Tutrial
+        model = Tutorial
         fields = '__all__'
         read_only_fields = ['writer']
 

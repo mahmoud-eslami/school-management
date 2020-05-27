@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     'News',
     'Classes',
     'Token',
-    'tutorial',
+    'Tutorial',
     ]
 
 MIDDLEWARE = [
