@@ -8,4 +8,3 @@ urlpatterns = [
     path('tutorial/api/', views.tutorialApi.as_view(), name='tutorial'),
     path('tutorial/api/upload/', views.FileUploadView.as_view() , name = 'upload_tutorial'),
 ]
-# fix shod . hasdy ? ye react bedew

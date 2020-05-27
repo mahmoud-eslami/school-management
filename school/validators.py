@@ -1,6 +1,9 @@
 from django.core.exceptions import ValidationError
 import os
 
+def validate_reset_code(restCode):
+    pass
+
 def validate_password_size(password):
     pass
 

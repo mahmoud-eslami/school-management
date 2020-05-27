@@ -65,6 +65,7 @@ section_choices = [
 
 class MyUser(AbstractUser):
     role = models.CharField(max_length=1,choices=role_choices,default=MODERATION)
+    reset_code = models.CharField(max_length=7,blank=False,null=True)
 
 class userDoc(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='doc')
