@@ -2,6 +2,9 @@ from rest_framework import serializers
 from .models import *
 from school.validators import *
 
+class ModeratorChangePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
+
 class ChangePasswordInProfileSerilizer(serializers.Serializer):
     old_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)

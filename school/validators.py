@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 import os
 
+def validate_password_size(password):
+    pass
 
 def validate_image_size(image):
     imagesize = image.size

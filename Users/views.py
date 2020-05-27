@@ -8,6 +8,32 @@ import traceback
 from . import serializers
 from school.methods import *
 
+class ModeratorChangePass(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self , request):
+        try:
+            role = request.user.role
+            user_id = request.GET['user_id']
+            if MyUser.objects.all().filter(id = user_id).exists():
+                temp_user = MyUser.objects.get(id = user_id)
+                if role == '1':
+                    serializer = serializers.ModeratorChangePasswordSerializer(data = request.data)
+                    if serializer.is_valid():
+                        new_password = serializer.data.get('new_password')
+                        temp_user.set_password(new_password)
+                        temp_user.save()
+                        return CustomResponse(self, status_code=200, errors=["رمز عبور با موفقیت تغییر کرد ."], message="", data="", status=status.HTTP_200_OK)
+                    else:
+                        message = serializer.errors
+                        return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+                else:
+                    return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
+            else:
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ChangePassInProfile(APIView):
     permission_classes=(IsAuthenticated,)
