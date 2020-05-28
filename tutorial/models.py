@@ -7,15 +7,12 @@ from django.conf import settings
 pv = "0"
 public = "1"
 #==========
-
-
 #====================================
 #section choice for post massage for all user or specefic user
 post_type_choice = [
-(pv,"پست شخصی"),
+(pv,"خصوصی"),
 (public, "عمومی"),
 ]
-
 #===================================
 
 class Tutorial (models.Model):
@@ -25,11 +22,11 @@ class Tutorial (models.Model):
     content = models.CharField(max_length=250 ,blank= False , null = True)
     writer  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='writer')
     ttype = models.CharField(choices= post_type_choice,max_length = 1, blank = False ,default= public)
-    tfile = models.CharField(max_length= 250 , blank= False, null = True)
+    tfile = models.CharField(max_length= 250 , blank= True, null = True)
 
 
 
 
-class file (models.Model):
+class File(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    file = models.FileField(upload_to='uploads',blank=False,null=True,validators=[validate_file_size , format_file ])
+    file = models.FileField(upload_to='uploads',blank=False,null=True,validators=[validate_file_size,validate_format_file ])

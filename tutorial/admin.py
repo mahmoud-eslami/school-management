@@ -5,6 +5,6 @@ from .models import  *
 class CustomToturial(admin.ModelAdmin):
     list_display=['id','title','ttype','tfile','writer']
 
-@admin.register(file)
+@admin.register(File)
 class CustomFile(admin.ModelAdmin):
     list_display=['user_id','file']

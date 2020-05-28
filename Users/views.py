@@ -170,16 +170,16 @@ class ImageApi(APIView):
     def post(self , request):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
-            user_id = request.user.id
-            if MyUser.objects.all().filter(id = user_id).exists():
-                if serializer.is_valid():
+            if serializer.is_valid():
+                user_id = serializer.validated_data.get('user_id')
+                if MyUser.objects.all().filter(id = user_id).exists():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors=[], message="عکس با موفقیت اپلود شد", data=str(serializer.instance.image), status=status.HTTP_200_OK)
                 else:
-                    message = serializer.errors
-                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+                    return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from Users.models import MyUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -10,15 +11,12 @@ import traceback
 from . import serializers
 from rest_framework.parsers import FileUploadParser
 
-
-
-
 class getAlltutorial (APIView) :
     permission_classes=(IsAuthenticated,)
     def get(self,request):
         try :
             all_tutorial = Tutorial.objects.all()
-            serializer = serializers.serializer(all_tutorial , many = True)
+            serializer = serializers.TutorialSerilizer(all_tutorial , many = True)
             return CustomResponse(self, status_code=200, errors=[], message="", data =serializer.data, status=status.HTTP_200_OK)
         except Exception as e :
             trace_back = traceback.format_exc()
@@ -47,11 +45,10 @@ class tutorialApi(APIView):
             serializer = serializers.TutorialSerilizer(data = requset.data )
             if  serializer.is_valid() :
                 serializer.save()
-                return CustomResponse(self, status_code=200, errors=[], message = "اموزش با موفقیت اپلود شد", data="", status=status.HTTP_200_OK)
+                return CustomResponse(self, status_code=200, errors=[], message ="آموزش با موفقیت ایجد شد.", data="", status=status.HTTP_200_OK)
             else :
                 massage = serializer.errors
                 return CustomResponse(self, status_code=406, errors = massage, message="", data="", status=status.HTTP_200_OK)
-
         except  Exception as  e:
                 trace_back = traceback.format_exc()
                 message = str(e) + ' ' + str(trace_back)
@@ -83,6 +80,9 @@ class tutorialApi(APIView):
                 if serializer.is_valid():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors="", message="اموزش با موفقیت اپدیت شد", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors =message, message="", data="", status=status.HTTP_200_OK)
             except Exception as e :
                 trace_back = traceback.format_exc()
                 message = str(e) + ' ' + str(trace_back)
@@ -90,15 +90,19 @@ class tutorialApi(APIView):
 
 class FileUploadView(APIView):
     permission_classes=(IsAuthenticated,)
-    parser_class = (FileUploadParser,)
     def post(self, request):
         try:
-            file_serializer = TutorialSerilizer(data=request.data)
+            file_serializer = serializers.UploadFileSerializer(data=request.data)
             if file_serializer.is_valid():
-                file_serializer.save()
-                return CustomResponse(self, status_code=200, errors="", message="اموزش با موفقیت اپلود شد", data=[], status=status.HTTP_200_OK)
+                user_id = file_serializer.validated_data.get('user_id')
+                if MyUser.objects.all().filter(id = user_id).exists():
+                    file_serializer.save()
+                    return CustomResponse(self, status_code=200, errors="", message="فایل با موفقیت اپلود شد.", data=str(file_serializer.instance.file), status=status.HTTP_200_OK)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                return CustomResponse(self, status_code=406, errors="", message="خطایی در اپلود امورش رخ داده است", data=[], status=status.HTTP_200_OK)
+                message = file_serializer.errors
+                return CustomResponse(self, status_code=406, errors="", message=message, data=[], status=status.HTTP_200_OK)
         except Exception as e :
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
