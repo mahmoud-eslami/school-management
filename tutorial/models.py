@@ -3,25 +3,13 @@ from django.contrib.auth.models import User
 from school.validators import *
 from django.conf import settings
 
-
-pv = "0"
-public = "1"
-#==========
-#====================================
-#section choice for post massage for all user or specefic user
-post_type_choice = [
-(pv,"خصوصی"),
-(public, "عمومی"),
-]
-#===================================
-
 class Tutorial (models.Model):
     # in theis class you can upload pdf for tutorial
     id = models.AutoField(primary_key = True)
-    title = models.CharField(max_length=250,blank= False , null= True)
-    content = models.CharField(max_length=250 ,blank= False , null = True)
+    title = models.CharField(max_length=250,blank= False , null= False)
+    content = models.CharField(max_length=250 ,blank= False , null = False)
     writer  = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='writer')
-    ttype = models.CharField(choices= post_type_choice,max_length = 1, blank = False ,default= public)
+    release_date = models.CharField(max_length=100,blank= False , null= True)
     tfile = models.CharField(max_length= 250 , blank= True, null = True)
 
 

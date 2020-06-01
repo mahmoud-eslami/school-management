@@ -134,7 +134,7 @@ DATABASES = {
     }
      #'default': {
     #    'ENGINE': 'django.db.backends.mysql',
-    #    'NAME': 'myschool',
+    #    'NAME': 'mysc1',
     #    'USER': 'root',
     #    'PASSWORD': 'mahmoud1998',
     #    'HOST': 'db',

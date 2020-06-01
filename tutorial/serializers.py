@@ -9,7 +9,7 @@ class TutorialSerilizer(serializers.Serializer):
     writer_id = serializers.CharField(max_length=10,allow_null=False,allow_blank=True)
     title = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
     content = serializers.CharField(max_length=250,allow_null=False,allow_blank=False)
-    ttype = serializers.CharField(max_length=1,allow_null=False,allow_blank=False)
+    release_date = serializers.CharField(max_length=100,allow_null=False,allow_blank=False)
     tfile = serializers.CharField(max_length=250,allow_null=True,allow_blank=True)
 
     def create(self , validated_data):
@@ -18,7 +18,6 @@ class TutorialSerilizer(serializers.Serializer):
     def update(self , instance , validated_data):
         instance.title = validated_data.get('title' , instance.title)
         instance.content = validated_data.get('content' , instance.content)
-        instance.ttype = validated_data.get('ttype' , instance.ttype)
         instance.tfile = validated_data.get('tfile' , instance.tfile)
         instance.save()
         return instance
