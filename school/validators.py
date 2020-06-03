@@ -2,11 +2,11 @@ from django.core.exceptions import ValidationError
 from Users.models import *
 import os
 
-def validate_reset_code(restCode,user_id):
+def validate_reset_code(restCode,national_code):
     user = MyUser.objects.get(id = user_id)
     user_resetCode = user.reset_code
     entered_resetCode_size = len(restCode)
-    if entered_resetCode_size != 7:
+    if entered_resetCode_size != 5:
         raise ValidationError("تعداد کاراکتر نامعتبر است.")
     elif user_resetCode != restCode:
         raise ValidationError("کد دو مرحله ای نامعتبر.")

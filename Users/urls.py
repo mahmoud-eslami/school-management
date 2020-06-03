@@ -2,6 +2,8 @@ from django.urls import path, include
 from  . import views
 
 urlpatterns = [
+    path('user/sendResetCode/',views.SendResetCode.as_view(),name='send_reset_code'),
+    path('user/changePass/',views.OutsideChangePass.as_view(),name='outside_change_pass'),
     path('user/profile/',views.userProfileApi.as_view(),name='user_profile'),
     path('user/UpdateUserAndUserDoc/',views.UpdateUserAndUserDoc.as_view(),name='update_user_userDoc'),
     path('user/ChangePassInProfile/',views.ChangePassInProfile.as_view(),name='change_pass_profile'),

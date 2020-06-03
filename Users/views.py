@@ -2,11 +2,70 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from school import settings
 from rest_framework import status
 from .models import *
 import traceback
 from . import serializers
 from school.methods import *
+from django.core.mail import send_mail
+
+class OutsideChangePass(APIView):
+    def post(self, request):
+        try:
+            reset_code = request.GET['reset_code']
+            national_code = request.GET['national_code']
+            user_id = findUserByNationalCode(national_code)
+            temp_user = MyUser.objects.get(id = user_id)
+            if temp_user.reset_code == reset_code:
+                temp_user.set_password(national_code)
+                return CustomResponse(self, status_code=200, errors=[], message="رمز عبور به کد ملی تغییر کرد.", data="", status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors=["کد وارد شده نا معتبر."], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# use me before send new code and after change password api
+def deleteResetCode(self,user_id):
+    if MyUser.objects.all().filter(id = user_id).exists():
+        user = MyUser.objects.get(id = user_id)
+        user.reset_code = ""
+        return
+    else:
+        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+
+def findUserByNationalCode(self,national_code):
+    if userDoc.objects.all().filter(nationalCode = national_code).exists():
+        temp_userDoc = userDoc.objects.get(nationalCode = national_code)
+        temp_user = MyUser.objects.get(id = temp_userDoc.user_id)
+        return temp_user.id
+    else:
+        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+
+class SendResetCode(APIView):
+    def post(self , request):
+        try:
+            national_code = request.GET['national_code']
+            user_id = findUserByNationalCode(self,national_code)
+            deleteResetCode(self,user_id)
+            temp_user = MyUser.objects.get(id = user_id)
+            temp_userDoc = userDoc.objects.get(user_id = user_id)
+            code = GenerateResetCode(self,5)
+            print(code)
+            send_mail('subject',
+            code,
+            settings.EMAIL_HOST_USER,
+            ['ticac66640@dfb55.com'],
+            fail_silently=False)
+            temp_user.reset_code = code
+            temp_user.save()
+            return CustomResponse(self, status_code=200, errors=[], message="کد با موفقیت ارسال شد .", data="", status=status.HTTP_200_OK)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ModeratorChangePass(APIView):
     permission_classes=(IsAuthenticated,)
