@@ -2,15 +2,12 @@ from rest_framework import serializers
 from .models import *
 from school.validators import *
 
-class ModeratorChangePasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
-
 class ChangePasswordInProfileSerilizer(serializers.Serializer):
     old_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     new_password = serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
 
 class ImageSerilizer(serializers.Serializer):
-    user_id = serializers.CharField(max_length=3,allow_blank=True,allow_null=False)
+    user_id = serializers.CharField(max_length=3,allow_blank=False,allow_null=True)
     image = serializers.ImageField(max_length=None, allow_empty_file=False,use_url=True,validators=[validate_image_size,])
 
     def create(self , validated_data):

@@ -2,99 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from school import settings
 from rest_framework import status
 from .models import *
 import traceback
 from . import serializers
 from school.methods import *
-from django.core.mail import send_mail
 
-###########################################################################
-# use me before send new code and after change password api
-def deleteResetCode(self,user_id):
-    if MyUser.objects.all().filter(id = user_id).exists():
-        user = MyUser.objects.get(id = user_id)
-        user.reset_code = "-"
-        user.save()
-        return
-    else:
-        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-
-def findUserByNationalCode(self,national_code):
-    if userDoc.objects.all().filter(nationalCode = national_code).exists():
-        temp_userDoc = userDoc.objects.get(nationalCode = national_code)
-        temp_user = MyUser.objects.get(id = temp_userDoc.user_id)
-        return temp_user.id
-    else:
-        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-###########################################################################
-
-
-class OutsideChangePass(APIView):
-    def post(self, request):
-        try:
-            reset_code = request.GET['reset_code']
-            national_code = request.GET['national_code']
-            user_id = findUserByNationalCode(self,national_code)
-            temp_user = MyUser.objects.get(id = user_id)
-            if temp_user.reset_code == reset_code:
-                temp_user.set_password(national_code)
-                deleteResetCode(self,user_id)
-                return CustomResponse(self, status_code=200, errors=[], message="رمز عبور به کد ملی تغییر کرد.", data="", status=status.HTTP_200_OK)
-            else:
-                return CustomResponse(self, status_code=406, errors=["کد وارد شده نا معتبر."], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-        except Exception as e :
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class SendResetCode(APIView):
-    def post(self , request):
-        try:
-            national_code = request.GET['national_code']
-            user_id = findUserByNationalCode(self,national_code)
-            deleteResetCode(self,user_id)
-            temp_user = MyUser.objects.get(id = user_id)
-            temp_userDoc = userDoc.objects.get(user_id = user_id)
-            email = temp_user.email
-            code = GenerateResetCode(self,5)
-            print(code)
-            send_mail('کد دومرحله ای تغییر رمز عبور.','Your Code is : {0}'.format(code),settings.EMAIL_HOST_USER,['{0}'.format(email),],fail_silently=False)
-            temp_user.reset_code = code
-            temp_user.save()
-            return CustomResponse(self, status_code=200, errors=[], message="کد با موفقیت ارسال شد .", data="", status=status.HTTP_200_OK)
-        except Exception as e :
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class ModeratorChangePass(APIView):
-    permission_classes=(IsAuthenticated,)
-    def post(self , request):
-        try:
-            role = request.user.role
-            user_id = request.GET['user_id']
-            if MyUser.objects.all().filter(id = user_id).exists():
-                temp_user = MyUser.objects.get(id = user_id)
-                if role == '1':
-                    serializer = serializers.ModeratorChangePasswordSerializer(data = request.data)
-                    if serializer.is_valid():
-                        new_password = serializer.data.get('new_password')
-                        temp_user.set_password(new_password)
-                        temp_user.save()
-                        return CustomResponse(self, status_code=200, errors=["رمز عبور با موفقیت تغییر کرد ."], message="", data="", status=status.HTTP_200_OK)
-                    else:
-                        message = serializer.errors
-                        return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
-                else:
-                    return CustomResponse(self,status_code=403,errors=["شما دسترسی به این بخش را ندارید"],message="", data="",status=status.HTTP_403_FORBIDDEN)
-            else:
-                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-        except Exception as e:
-            trace_back = traceback.format_exc()
-            message = str(e) + ' ' + str(trace_back)
-            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ChangePassInProfile(APIView):
     permission_classes=(IsAuthenticated,)
@@ -231,16 +144,16 @@ class ImageApi(APIView):
     def post(self , request):
         try:
             serializer = serializers.ImageSerilizer(data = request.data)
-            if serializer.is_valid():
-                user_id = serializer.validated_data.get('user_id')
-                if MyUser.objects.all().filter(id = user_id).exists():
+            user_id = request.user.id
+            if MyUser.objects.all().filter(id = user_id).exists():
+                if serializer.is_valid():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors=[], message="عکس با موفقیت اپلود شد", data=str(serializer.instance.image), status=status.HTTP_200_OK)
                 else:
-                    return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                message = serializer.errors
-                return CustomResponse(self, status_code=406, errors=message, message="", data="", status = status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)

@@ -28,5 +28,5 @@ class CustomUser(BaseUserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-    list_display = ('id','username','email', 'first_name', 'last_name', 'is_staff','role','reset_code')
+    list_display = ('id','username','email', 'first_name', 'last_name', 'is_staff','role')
     search_fields = ('email', 'first_name', 'last_name')

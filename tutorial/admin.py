@@ -1,10 +1,10 @@
 from django.contrib import admin
 from .models import  *
 
-@admin.register(Tutorial)
+@admin.register(Tutrial)
 class CustomToturial(admin.ModelAdmin):
-    list_display=['id','title','tfile','writer']
+    list_display=['id','title','ttype','tfile','writer']
 
-@admin.register(File)
+@admin.register(file)
 class CustomFile(admin.ModelAdmin):
     list_display=['user_id','file']
