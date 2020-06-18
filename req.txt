@@ -1,0 +1,11 @@
+asgiref==3.2.7
+Django==3.0.6
+django-cors-headers==3.2.1
+django-jet==1.0.8
+djangorestframework==3.11.0
+djangorestframework-simplejwt==4.4.0
+mysqlclient==1.4.6
+Pillow==7.1.2
+PyJWT==1.7.1
+pytz==2020.1
+sqlparse==0.3.1
