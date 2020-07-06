@@ -5,11 +5,11 @@ spec:
   port: 80
   source:
     context: .
-    media_path: media
+    media_path: ''
     project_type: django
-    python_version: 3.8.2
-    static_path: '"'
-    wsgi: school.wsgi
+    python_version: '3.7'
+    static_path: static
+    wsgi: school.wsgi.application
   volume_mounts:
-  - mount_path: /usr/src/app/media
+  - mount_path: /usr/src/app/
     sub_path: myrest/media
