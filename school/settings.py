@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'Classes',
     'Token',
     'Tutorial',
+    'ClassActivity',
     ]
 
 MIDDLEWARE = [
