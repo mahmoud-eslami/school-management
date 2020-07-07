@@ -65,3 +65,9 @@ class WeeklySchedule(models.Model):
     third_bell = models.ForeignKey(Lessons,on_delete=models.CASCADE,related_name='third_bell')   
     forth_bell = models.ForeignKey(Lessons,on_delete=models.CASCADE,related_name='forth_bell')  
     fifth_bell = models.ForeignKey(Lessons,on_delete=models.CASCADE,related_name='fifth_bell')
+
+    def __str__(self):
+        return self.week_day + str(self.class_id)
+
+    class Meta:
+        unique_together = ('class_id','week_day')    
