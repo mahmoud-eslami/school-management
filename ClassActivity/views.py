@@ -44,7 +44,7 @@ class lessonsApi(APIView):
     def post(self, request):
         try:
             role = request.user.role
-            if role == 3 & role == 4:
+            if role == 3 or role == 4:
                 return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
             else:
                 serializer = serializers.LessonsSerializers(data=request.data)
