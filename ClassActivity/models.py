@@ -53,7 +53,7 @@ class Lessons(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=250, blank=False, null=False)
     section_id = models.CharField(
-        max_length=2, choices=section_choices, default=pre_one)
+        max_length=2, choices=section_choices, default=pre_one,blank=False, null=False)
 
     def __str__(self):
         return self.title
@@ -61,19 +61,19 @@ class Lessons(models.Model):
 
 class WeeklySchedule(models.Model):
     id = models.AutoField(primary_key=True)
-    class_id = models.ForeignKey(Classes, on_delete=models.CASCADE)
+    class_id = models.ForeignKey(Classes, on_delete=models.CASCADE,blank=False, null=False)
     week_day = models.CharField(
-        max_length=1, choices=week_day_choices, default=day_one)
+        max_length=1, choices=week_day_choices, default=day_one,blank=False, null=False)
     first_bell = models.ForeignKey(
-        Lessons, on_delete=models.CASCADE, related_name='first_bell')
+        Lessons, on_delete=models.CASCADE, related_name='first_bell',blank=False, null=False)
     second_bell = models.ForeignKey(
-        Lessons, on_delete=models.CASCADE, related_name='second_bell')
+        Lessons, on_delete=models.CASCADE, related_name='second_bell',blank=False, null=False)
     third_bell = models.ForeignKey(
-        Lessons, on_delete=models.CASCADE, related_name='third_bell')
+        Lessons, on_delete=models.CASCADE, related_name='third_bell',blank=False, null=False)
     forth_bell = models.ForeignKey(
-        Lessons, on_delete=models.CASCADE, related_name='forth_bell')
+        Lessons, on_delete=models.CASCADE, related_name='forth_bell',blank=False, null=False)
     fifth_bell = models.ForeignKey(
-        Lessons, on_delete=models.CASCADE, related_name='fifth_bell')
+        Lessons, on_delete=models.CASCADE, related_name='fifth_bell',blank=False, null=False)
 
     def __str__(self):
         return self.week_day + str(self.class_id)

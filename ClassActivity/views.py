@@ -35,7 +35,7 @@ class lessonsApi(APIView):
                 serializer = serializers.LessonsSerializers(temp_lesson)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
-                return CustomResponse(self, status_code=406, errors=[], message="درس مورد نظر موجود نیست .", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=[], message="درس مورد نظر موجود نیست .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -109,9 +109,12 @@ class weeklyScheduleApi(APIView):
             class_id = request.GET['class_id']
             week_day = request.GET['week_day']
             if WeeklySchedule.objects.filter(class_id=class_id, week_day=week_day).exists():
-                pass
+                temp_week = WeeklySchedule.objects.get(
+                    class_id=class_id, week_day=week_day)
+                serializer = serializers.WeeklyScheduleSerializer(temp_week)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
-                pass
+                return CustomResponse(self, status_code=406, errors=[], message="برنامه مورد نظر یافت نشد .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -123,7 +126,13 @@ class weeklyScheduleApi(APIView):
             if role == 3 or role == 4:
                 return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
             else:
-                pass
+                serializer = serializers.WeeklyScheduleSerializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="برنامه با موفقیت ایجاد شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE) 
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)

@@ -36,3 +36,5 @@ class WeeklyScheduleSerializer(serializers.ModelSerializer):
         instance.third_bell = validated_data('third_bell', instance.third_bell)
         instance.forth_bell = validated_data('forth_bell', instance.forth_bell)
         instance.fifth_bell = validated_data('fifth_bell', instance.fifth_bell)
+        instance.save()
+        return instance
