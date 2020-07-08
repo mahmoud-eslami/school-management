@@ -17,3 +17,22 @@ class LessonsSerializers(serializers.ModelSerializer):
             'section_id', instanse.section_id)
         instanse.save()
         return instanse
+
+
+class WeeklyScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklySchedule
+        fields = '__all__'
+        read_only_fields = ['id']
+
+    def create(self, validated_data):
+        return WeeklySchedule.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.class_id = validated_data('class_id', instance.class_id)
+        instance.week_day = validated_data('week_day', instance.week_day)
+        instance.first_bell = validated_data('first_bell', instance.first_bell)
+        instance.second_bell = validated_data('second_bell', instance.second_bell)
+        instance.third_bell = validated_data('third_bell', instance.third_bell)
+        instance.forth_bell = validated_data('forth_bell', instance.forth_bell)
+        instance.fifth_bell = validated_data('fifth_bell', instance.fifth_bell)

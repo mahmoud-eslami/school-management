@@ -58,9 +58,10 @@ class SendResetCode(APIView):
             temp_user = MyUser.objects.get(id = user_id)
             temp_userDoc = userDoc.objects.get(user_id = user_id)
             email = temp_user.email
+            national_code = temp_userDoc.nationalCode
             code = GenerateResetCode(self,5)
             print(code)
-            send_mail('کد دومرحله ای تغییر رمز عبور.','Your Code is : {0}'.format(code),settings.EMAIL_HOST_USER,['{0}'.format(email),],fail_silently=False)
+            send_mail('لینک دومرحله ای تغییر رمز عبور.','myrest-novinschool.fandogh.cloud/Users/App/user/ChangePassInProfile/'.format(code),settings.EMAIL_HOST_USER,['{0}'.format(email),],fail_silently=False)
             temp_user.reset_code = code
             temp_user.save()
             return CustomResponse(self, status_code=200, errors=[], message="کد با موفقیت ارسال شد .", data="", status=status.HTTP_200_OK)
