@@ -145,7 +145,20 @@ class weeklyScheduleApi(APIView):
             if role == 3 or role == 4:
                 return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
             else:
-                pass
+                class_id = request.GET['class_id']
+                week_day = request.GET['week_day']
+                if WeeklySchedule.objects.filter(week_day=week_day , class_id = class_id).exists():
+                    temp_week = WeeklySchedule.objects.get(week_day=week_day , class_id = class_id)
+                    serializer = serializers.WeeklyScheduleSerializer(
+                        temp_week, request.data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return CustomResponse(self, status_code=200, errors=[], message="برنامه با موفقیت ویرایش شد .", data="", status=status.HTTP_200_OK)
+                    else:
+                        message = serializer.errors
+                        return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)    
+                else:
+                    return CustomResponse(self, status_code=406, errors=["برنامه با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
