@@ -39,14 +39,18 @@ class OutsideChangePass(APIView):
         try:
             reset_code = request.GET['reset_code']
             national_code = request.GET['national_code']
-            user_id = findUserByNationalCode(self, national_code)
-            temp_user = MyUser.objects.get(id=user_id)
-            if temp_user.reset_code == reset_code:
-                temp_user.set_password(national_code)
-                deleteResetCode(self, user_id)
-                return CustomResponse(self, status_code=200, errors=[], message="رمز عبور به کد ملی تغییر کرد.", data="", status=status.HTTP_200_OK)
+            if userDoc.objects.all().filter(nationalCode=national_code).exists():
+                temp_userDoc = userDoc.objects.get(nationalCode=national_code)
+                temp_user = MyUser.objects.get(id=temp_userDoc.user_id)
+                if temp_user.reset_code == reset_code:
+                    temp_user.set_password(national_code)
+                    temp_user.reset_code = "-"
+                    temp_user.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="رمز عبور به کد ملی تغییر کرد.", data="", status=status.HTTP_200_OK)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["کد وارد شده نا معتبر."], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                return CustomResponse(self, status_code=406, errors=["کد وارد شده نا معتبر."], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
