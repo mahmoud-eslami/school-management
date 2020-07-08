@@ -106,24 +106,38 @@ class weeklyScheduleApi(APIView):
 
     def get(self, request):
         try:
-            pass
+            class_id = request.GET['class_id']
+            week_day = request.GET['week_day']
+            if WeeklySchedule.objects.filter(class_id=class_id, week_day=week_day).exists():
+                pass
+            else:
+                pass
         except Exception as e:
             pass
 
     def post(self, request):
         try:
-            pass
+            role = request.user.role
+            if role == 3 or role == 4:
+                return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
+            else:
         except Exception as e:
             pass
 
     def put(self, request):
         try:
-            pass
+            role = request.user.role
+            if role == 3 or role == 4:
+                return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
+            else:
         except Exception as e:
             pass
 
     def delete(self, request):
         try:
-            pass
+            role = request.user.role
+            if role == 3 or role == 4:
+                return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
+            else:
         except Exception as e:
             pass
