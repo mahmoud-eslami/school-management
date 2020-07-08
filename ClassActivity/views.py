@@ -126,13 +126,14 @@ class weeklyScheduleApi(APIView):
             if role == 3 or role == 4:
                 return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
             else:
-                serializer = serializers.WeeklyScheduleSerializer(data=request.data)
+                serializer = serializers.WeeklyScheduleSerializer(
+                    data=request.data)
                 if serializer.is_valid():
                     serializer.save()
                     return CustomResponse(self, status_code=200, errors=[], message="برنامه با موفقیت ایجاد شد .", data="", status=status.HTTP_200_OK)
                 else:
                     message = serializer.errors
-                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE) 
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -156,7 +157,12 @@ class weeklyScheduleApi(APIView):
             if role == 3 or role == 4:
                 return CustomResponse(self, status_code=403, errors=["شما دسترسی به این بخش را ندارید"], message="", data="", status=status.HTTP_403_FORBIDDEN)
             else:
-                pass
+                week_id = request.GET['week_id']
+                if WeeklySchedule.objects.filter(id=week_id).exists():
+                    WeeklySchedule.objects.get(id=week_id).delete()
+                    return CustomResponse(self, status_code=200, errors=[], message="برنامه با موفقیت حذف شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    return CustomResponse(self, status_code=406, errors=["برنامه با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             patrace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
