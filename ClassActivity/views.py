@@ -42,7 +42,6 @@ class lessonsApi(APIView):
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
-        permission_classes = (IsAuthenticated,)
         try:
             role = request.user.role
             if role == 3 & role == 4:
@@ -61,7 +60,6 @@ class lessonsApi(APIView):
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
-        permission_classes = (IsAuthenticated,)
         try:
             role = request.user.role
             if role == 3 or role == 4:
@@ -79,7 +77,6 @@ class lessonsApi(APIView):
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request):
-        permission_classes = (IsAuthenticated,)
         try:
             role = request.user.role
             if role == 3 or role == 4:
@@ -102,3 +99,31 @@ class lessonsApi(APIView):
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class weeklyScheduleApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def post(self, request):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def put(self, request):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def delete(self, request):
+        try:
+            pass
+        except Exception as e:
+            pass
