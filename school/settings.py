@@ -133,14 +133,14 @@ DATABASES = {
            'read_default_file': './my.cnf',
        },
     }
-    #  'default': {
-    #    'ENGINE': 'django.db.backends.mysql',
-    #    'NAME': 'school1',
-    #    'USER': 'root',
-    #    'PASSWORD': 'mahmoud1998',
-    #    'HOST': 'db',
-    #    'PORT': '3306',
-    # },
+#      'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'school1',
+#        'USER': 'root',
+#        'PASSWORD': 'mahmoud1998',
+#        'HOST': 'db',
+#        'PORT': '3306',
+#     },
 }
 
 
