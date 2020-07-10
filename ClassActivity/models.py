@@ -1,5 +1,6 @@
 from django.db import models
 from Classes.models import Classes
+from django.conf import settings
 
 # section
 pre_one = '0'
@@ -80,3 +81,15 @@ class WeeklySchedule(models.Model):
 
     class Meta:
         unique_together = ('class_id', 'week_day')
+
+
+
+class PresentAbsentList(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    day = models.CharField(max_length=5,blank=False,null=False)
+    month = models.CharField(max_length=5,blank=False,null=False)
+    year = models.CharField(max_length=5,blank=False,null=False)
+
+
+        
