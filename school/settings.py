@@ -75,7 +75,8 @@ INSTALLED_APPS = [
     'News',
     'Classes',
     'Token',
-    'tutorial',
+    'Tutorial',
+    'ClassActivity',
     ]
 
 MIDDLEWARE = [
@@ -127,19 +128,19 @@ DATABASES = {
     'default': {
     #    'ENGINE': 'django.db.backends.sqlite3',
     #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-         'ENGINE': 'django.db.backends.mysql',
-         'OPTIONS': {
-            'read_default_file': './my.cnf',
-        },
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+           'read_default_file': './my.cnf',
+       },
     }
-     #'default': {
+    #  'default': {
     #    'ENGINE': 'django.db.backends.mysql',
-    #    'NAME': 'myschool',
+    #    'NAME': 'school1',
     #    'USER': 'root',
     #    'PASSWORD': 'mahmoud1998',
     #    'HOST': 'db',
     #    'PORT': '3306',
-    #},
+    # },
 }
 
 
@@ -184,3 +185,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Media files (Images)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# smtp emails
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'schoolmahmoudok@gmail.com'
+EMAIL_HOST_PASSWORD = 'mahmoodok1213'
+DEFAULT_FROM_EMAIL = 'schoolmahmoudok@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

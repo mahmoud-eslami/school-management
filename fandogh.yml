@@ -1,0 +1,15 @@
+kind: ExternalService
+name: myrest
+spec:
+  image_pull_policy: Always
+  port: 80
+  source:
+    context: .
+    media_path: media
+    project_type: django
+    python_version: 3.8.2
+    static_path: '"'
+    wsgi: school.wsgi
+  volume_mounts:
+  - mount_path: /usr/src/app/media
+    sub_path: myrest/media
