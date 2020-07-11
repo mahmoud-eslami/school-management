@@ -31,12 +31,13 @@ section_choices = [
 ]
 #############################
 # weekDay
-day_one = '1'
-day_two = '2'
-day_three = '3'
-day_four = '4'
-day_five = '5'
-day_six = '6'
+day_one = '0'
+day_two = '1'
+day_three = '2'
+day_four = '3'
+day_five = '4'
+day_six = '5'
+day_seven = '6'
 #############################
 # section choices
 week_day_choices = [
@@ -46,6 +47,7 @@ week_day_choices = [
     (day_four, 'سه شنبه'),
     (day_five, 'چهار شنبه'),
     (day_six, 'پنج شنبه'),
+    (day_seven, 'جمعه'),
 ]
 #############################
 
@@ -59,9 +61,7 @@ class Lessons(models.Model):
     def __str__(self):
         return self.title
 
-
 class WeeklySchedule(models.Model):
-    id = models.AutoField(primary_key=True)
     class_id = models.ForeignKey(Classes, on_delete=models.CASCADE,blank=False, null=False)
     week_day = models.CharField(
         max_length=1, choices=week_day_choices, default=day_one,blank=False, null=False)
