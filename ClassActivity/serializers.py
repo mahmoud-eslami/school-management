@@ -3,10 +3,10 @@ from .models import *
 
 
 class LessonsSerializers(serializers.ModelSerializer):
+
     class Meta:
         model = Lessons
         fields = '__all__'
-        read_only_fields = ['id']
 
     def create(self, validated_data):
         return Lessons.objects.create(**validated_data)
@@ -20,13 +20,10 @@ class LessonsSerializers(serializers.ModelSerializer):
 
 
 class WeeklyScheduleSerializer(serializers.ModelSerializer):
-    lesson = LessonsSerializers(read_only=True)
-
     class Meta:
         model = WeeklySchedule
         fields = '__all__'
         read_only_fields = ['id']
-        depth = 1
 
     def create(self, validated_data):
         return WeeklySchedule.objects.create(**validated_data)

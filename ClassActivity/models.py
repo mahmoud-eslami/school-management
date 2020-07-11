@@ -62,6 +62,7 @@ class Lessons(models.Model):
         return self.title
 
 class WeeklySchedule(models.Model):
+    id = models.AutoField(primary_key=True)
     class_id = models.ForeignKey(Classes, on_delete=models.CASCADE,blank=False, null=False)
     week_day = models.CharField(
         max_length=1, choices=week_day_choices, default=day_one,blank=False, null=False)
@@ -75,9 +76,6 @@ class WeeklySchedule(models.Model):
         Lessons, on_delete=models.CASCADE, related_name='forth_bell',blank=False, null=False)
     fifth_bell = models.ForeignKey(
         Lessons, on_delete=models.CASCADE, related_name='fifth_bell',blank=False, null=False)
-
-    def __str__(self):
-        return self.week_day + str(self.class_id)
 
     class Meta:
         unique_together = ('class_id', 'week_day')

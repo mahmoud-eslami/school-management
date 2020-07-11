@@ -9,4 +9,5 @@ urlpatterns = [
          name='weekly_schedule_api'),
     path('weeklySchedule/GetClassSchedule/',
          views.getClassWeeklySchedule.as_view(), name='get_class_weekly_schedule'),
+    path('lessons/GetLessonsBySection/',views.getLessonsBySection.as_view(),name='get_lessons_section'),
 ]
