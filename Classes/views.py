@@ -69,7 +69,18 @@ class userClassesApi(APIView):
     
     def put(self , request):
         try:
-            pass
+            user_id = request.GET['user_id']
+            if UserClass.objects.filter(user_id = user_id).exists():
+                temp_userClass = UserClass.objects.get(user_id = user_id)
+                serializer = serializers.UserClassSerializer(temp_userClass,request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="کلاس با موفقیت بروزرسانی شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="برای کاربر مورد نظر کلاس تعریف نشده است .", data="", status=status.HTTP_406_NOT_ACCEPTABLE) 
         except Exception as e :
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
