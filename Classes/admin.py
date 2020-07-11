@@ -7,4 +7,4 @@ class CustomClasses(admin.ModelAdmin):
 
 @admin.register(UserClass)
 class CustomClasses(admin.ModelAdmin):
-    list_display=['user_id','userClass_id']
+    list_display=['user','class_id']
