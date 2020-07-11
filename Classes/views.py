@@ -77,7 +77,12 @@ class userClassesApi(APIView):
     
     def delete(self , request):
         try:
-            pass
+            user_id = request.GET['user_id']
+            if UserClass.objects.filter(user_id = user_id).exists():
+                UserClass.objects.get(user_id = user_id).delete()
+                return CustomResponse(self, status_code=200, errors=[], message="کاربر مورد نظر با موفقیت حذف شد .", data="", status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="کاربر در کلاسها وجود ندارد .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e :
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
