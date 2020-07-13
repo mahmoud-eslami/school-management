@@ -134,13 +134,13 @@ DATABASES = {
        },
     }
 #      'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'school1',
-#        'USER': 'root',
-#        'PASSWORD': 'mahmoud1998',
-#        'HOST': 'db',
-#        'PORT': '3306',
-#     },
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'school1',
+    #    'USER': 'root',
+    #    'PASSWORD': 'mahmoud1998',
+    #    'HOST': 'db',
+    #    'PORT': '3306',
+    # },
 }
 
 
