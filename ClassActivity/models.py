@@ -118,3 +118,6 @@ class GradeList(models.Model):
     lesson_id = models.ForeignKey(Lessons,on_delete=models.CASCADE)
     grade_type = models.CharField(max_length=2,choices=grade_type_choices,null=False,blank=False)
     grade_count = models.CharField(max_length=2,choices=grade_count_choices,null=False,blank=False)
+    day = models.CharField(max_length=5, blank=False, null=False)
+    month = models.CharField(max_length=5, blank=False, null=False)
+    year = models.CharField(max_length=5, blank=False, null=False)
