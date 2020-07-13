@@ -1,6 +1,22 @@
 from rest_framework import serializers
 from .models import *
 
+class PresentAbsentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresentAbsentList
+        fields = '__all__'
+
+    def create(self , validated_data):
+        return PresentAbsentList.objects.create(**validated_data)    
+
+    def update(self , instance , validated_data):
+        instance.user_id = validated_data.get('user_id',instance.user_id)
+        instance.day = validated_data.get('day',instance.day)
+        instance.month = validated_data.get('month',instance.month)
+        instance.year = validated_data.get('year',instance.year)
+        instance.save()
+        return instance
+
 
 class LessonsSerializers(serializers.ModelSerializer):
 

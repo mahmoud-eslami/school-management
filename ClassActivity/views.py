@@ -9,6 +9,49 @@ from rest_framework import status
 from . import serializers
 
 
+class PersentAbsentApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    # get by date
+    def get(self, request):
+        try:
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if PresentAbsentList.objects.filter(day = day , month = month , year = year).exists():
+                temp_list = PresentAbsentList.objects.filter(day = day , month = month , year = year)
+            else :
+                pass
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request):
+        try:
+            pass
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request):
+        try:
+            pass
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            pass
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class GetAllLessons(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -127,7 +170,7 @@ class getLessonsBySection(APIView):
     def get(self, request):
         try:
             section_id = request.GET['section_id']
-            if Lessons.objects.filter(section_id = section_id).exists():
+            if Lessons.objects.filter(section_id=section_id).exists():
                 temp_lessons = Lessons.objects.filter(section_id=section_id)
                 serializer = serializers.LessonsSerializers(
                     temp_lessons, many=True)
