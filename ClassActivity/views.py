@@ -14,7 +14,14 @@ class GradeListApi(APIView):
 
     def get(self, request):
         try:
-            pass
+            grade_owner = request.GET['grade_owner']
+            teacher_id = request.GET['grade_owner']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, teacher_id=teacher_id).exists():
+                temp_grade = GradeList.objects.filter(grade_owner_id=grade_owner, teacher_id=teacher_id)
+                serializer = serializers.GradeListSerializer(temp_grade , many = True)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors=['نمره های برای دانش آموز ثبت نشده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
