@@ -31,7 +31,13 @@ class GradeListApi(APIView):
 
     def post(self, request):
         try:
-            pass
+            serializer = serializers.GradeListSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return CustomResponse(self, status_code=200, errors=[], message="نمره دانش آموز با موفقیت ثبت شد .", data="", status=status.HTTP_200_OK)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -39,7 +45,24 @@ class GradeListApi(APIView):
 
     def put(self, request):
         try:
-            pass
+            grade_owner = request.GET['grade_owner']
+            lesson_id = request.GET['lesson_id']
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).exists():
+                temp_grade = GradeList.objects.get(
+                    grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year)
+                serializer = serializers.GradeListSerializer(
+                    temp_grade, request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="نمره این درس با موفقیت بروزرسانی شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                return CustomResponse(self, status_code=406, errors=['دانش آموز در این درس نمره ای ندارد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -53,7 +76,8 @@ class GradeListApi(APIView):
             month = request.GET['month']
             year = request.GET['year']
             if GradeList.objects.filter(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year):
-                GradeList.objects.get(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).delete()
+                GradeList.objects.get(
+                    grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="نمره این درس دانش آموز حذف شد .", data="", status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=['دانش آموز در این درس نمره ای ندارد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
