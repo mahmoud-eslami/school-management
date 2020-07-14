@@ -124,3 +124,6 @@ class GradeList(models.Model):
     day = models.CharField(max_length=5, blank=False, null=False)
     month = models.CharField(max_length=5, blank=False, null=False)
     year = models.CharField(max_length=5, blank=False, null=False)
+
+    class Meta:
+        unique_together = ('grade_owner_id','day','month','year','lesson_id')

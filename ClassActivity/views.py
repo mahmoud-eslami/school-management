@@ -15,13 +15,15 @@ class GradeListApi(APIView):
     def get(self, request):
         try:
             grade_owner = request.GET['grade_owner']
-            teacher_id = request.GET['grade_owner']
+            teacher_id = request.GET['teacher_id']
             if GradeList.objects.filter(grade_owner_id=grade_owner, teacher_id=teacher_id).exists():
-                temp_grade = GradeList.objects.filter(grade_owner_id=grade_owner, teacher_id=teacher_id)
-                serializer = serializers.GradeListSerializer(temp_grade , many = True)
+                temp_grade = GradeList.objects.filter(
+                    grade_owner_id=grade_owner, teacher_id=teacher_id)
+                serializer = serializers.GradeListSerializer(
+                    temp_grade, many=True)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
-                return CustomResponse(self, status_code=406, errors=['نمره های برای دانش آموز ثبت نشده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=['نمره ای یافت نشد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -45,7 +47,16 @@ class GradeListApi(APIView):
 
     def delete(self, request):
         try:
-            pass
+            grade_owner = request.GET['grade_owner']
+            lesson_id = request.GET['lesson_id']
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year):
+                GradeList.objects.get(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).delete()
+                return CustomResponse(self, status_code=200, errors=[], message="نمره این درس دانش آموز حذف شد .", data="", status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors=['دانش آموز در این درس نمره ای ندارد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
