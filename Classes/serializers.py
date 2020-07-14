@@ -1,8 +1,16 @@
 from rest_framework import serializers
 from .models import *
+from Users import serializers as userSerializer
 
-class CustomUsersOfClassSerializer(serializers.Serializer):
-    user_id = serializers.CharField(read_only=True)
+
+class CustomUsersOfClassSerializer(serializers.ModelSerializer):
+    user = userSerializer.UserSerializer(read_only=True)
+
+    class Meta:
+        model = UserClass
+        fields = '__all__'
+        # depth = 1
+
 
 class ClassSerializer(serializers.ModelSerializer):
 
@@ -30,5 +38,5 @@ class UserClassSerializer(serializers.ModelSerializer):
         model = UserClass
         fields = '__all__'
 
-    def create(self , validated_data):
+    def create(self, validated_data):
         return UserClass.objects.create(**validated_data)
