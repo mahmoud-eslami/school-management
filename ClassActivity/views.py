@@ -21,10 +21,10 @@ class PersentAbsentApi(APIView):
             if PresentAbsentList.objects.filter(day=day, month=month, year=year).exists():
                 temp_list = PresentAbsentList.objects.filter(
                     day=day, month=month, year=year)
-                serializer = serializers.PresentAbsentSerializer(temp_list)
+                serializer = serializers.PresentAbsentSerializer(temp_list , many=True)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
-                return CustomResponse(self, status_code=406, errors=['دانش آموزش امروز مدرسه نیومده .'], message="", data=data, status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=['دانش آموزی امروز مدرسه نیومده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -54,10 +54,10 @@ class PersentAbsentApi(APIView):
             year = request.GET['year']
             if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
                 temp_list = PresentAbsentList.objects.get(
-                    day=day, month=month, year=year, user_id=user_id).delete
+                    day=day, month=month, year=year, user_id=user_id).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="دانش آموز مورد نظر از لیست حضور حذف شد .", data="", status=status.HTTP_200_OK)
             else:
-                return CustomResponse(self, status_code=406, errors=['دانش آموزش مورد نظر امروز مدرسه نیومده .'], message="", data=data, status=status.HTTP_406_NOT_ACCEPTABLE)
+                return CustomResponse(self, status_code=406, errors=['دانش آموزش مورد نظر امروز مدرسه نیومده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)

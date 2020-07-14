@@ -110,6 +110,9 @@ class PresentAbsentList(models.Model):
     month = models.CharField(max_length=5, blank=False, null=False)
     year = models.CharField(max_length=5, blank=False, null=False)
 
+    class Meta:
+        unique_together = ('user_id','day','month','year')
+
 
 class GradeList(models.Model):
     id = models.AutoField(primary_key=True)
