@@ -133,7 +133,7 @@ DATABASES = {
            'read_default_file': './my.cnf',
        },
     }
-    #  'default': {
+#      'default': {
     #    'ENGINE': 'django.db.backends.mysql',
     #    'NAME': 'school1',
     #    'USER': 'root',

@@ -36,6 +36,84 @@ class GetAllUserClasses(APIView):
             message = str(e) + ' ' + str(trace_back)
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def delete(self , request):
+        try:
+            class_id = request.GET['class_id']
+            if UserClass.objects.filter(class_id = class_id).exists():
+                UserClass.objects.filter(class_id = class_id).delete()
+                return CustomResponse(self, status_code=200, errors=[], message="تموم دانش آموزای کلاس حذف شدند .", data="", status=status.HTTP_200_OK) 
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="دانش آموزی تو این کلاس نیست .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except  Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class userClassesApi(APIView):
+    permission_classes=(IsAuthenticated,)
+    
+    def get(self , request):
+        try:
+            user_id = request.GET['user_id']
+            if UserClass.objects.filter(user_id = user_id).exists():
+                temp_userClass = UserClass.objects.get(user_id = user_id)
+                serializer = serializers.UserClassSerializer(temp_userClass)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="برای کاربر مورد نظر کلاس تعریف نشده است .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def post(self , request):
+        try:
+            serializer = serializers.UserClassSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return CustomResponse(self, status_code=200, errors=[], message="کاربر مورد نظر با موفقیت به کلاس اضافه شد", data="", status=status.HTTP_200_OK)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def put(self , request):
+        try:
+            user_id = request.GET['user_id']
+            if UserClass.objects.filter(user_id = user_id).exists():
+                temp_userClass = UserClass.objects.get(user_id = user_id)
+                serializer = serializers.UserClassSerializer(temp_userClass,request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="کلاس با موفقیت بروزرسانی شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="برای کاربر مورد نظر کلاس تعریف نشده است .", data="", status=status.HTTP_406_NOT_ACCEPTABLE) 
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def delete(self , request):
+        try:
+            user_id = request.GET['user_id']
+            if UserClass.objects.filter(user_id = user_id).exists():
+                UserClass.objects.get(user_id = user_id).delete()
+                return CustomResponse(self, status_code=200, errors=[], message="کاربر مورد نظر با موفقیت حذف شد .", data="", status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="کاربر در کلاسها وجود ندارد .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class ClassesApi(APIView):
     permission_classes=(IsAuthenticated,)
 

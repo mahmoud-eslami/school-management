@@ -10,29 +10,6 @@ from . import serializers
 from school.methods import *
 from django.core.mail import send_mail
 
-###########################################################################
-# use me before send new code and after change password api
-
-
-def deleteResetCode(self, user_id):
-    if MyUser.objects.all().filter(id=user_id).exists():
-        user = MyUser.objects.get(id=user_id)
-        user.reset_code = "-"
-        user.save()
-        return
-    else:
-        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-
-
-def findUserByNationalCode(self, national_code):
-    if userDoc.objects.all().filter(nationalCode=national_code).exists():
-        temp_userDoc = userDoc.objects.get(nationalCode=national_code)
-        temp_user = MyUser.objects.get(id=temp_userDoc.user_id)
-        return temp_user.id
-    else:
-        return CustomResponse(self, status_code=406, errors=["کاربری با این ایدی وجود ندارد"], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
-###########################################################################
-
 
 class OutsideChangePass(APIView):
     def post(self, request):

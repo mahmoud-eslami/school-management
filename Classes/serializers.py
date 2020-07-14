@@ -27,3 +27,6 @@ class UserClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserClass
         fields = '__all__'
+
+    def create(self , validated_data):
+        return UserClass.objects.create(**validated_data)
