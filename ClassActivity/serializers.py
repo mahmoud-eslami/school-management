@@ -2,6 +2,29 @@ from rest_framework import serializers
 from .models import *
 
 
+class GradeListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GradeList
+        fields = '__all__'
+
+    def create(self , validated_data):
+        return GradeList.objects.create(**validated_data)    
+
+    def update(self , instance, validated_data):
+        instance.grade_owner_id = validated_data.get('grade_owner_id',instance.grade_owner_id)
+        instance.teacher_id = validated_data.get('teacher_id', instance.teacher_id)
+        instance.lesson_id = validated_data.get('lesson_id', instance.lesson_id)
+        instance.grade_type = validated_data.get('grade_type', instance.grade_type)
+        instance.grade_count = validated_data.get('grade_count', instance.grade_count)
+        instance.day = validated_data.get('day', instance.day)
+        instance.month = validated_data.get('month', instance.month)
+        instance.year = validated_data.get('year', instance.year)
+        instance.save()
+        return instance
+
+
+
 class PresentAbsentSerializer(serializers.ModelSerializer):
 
     class Meta:
