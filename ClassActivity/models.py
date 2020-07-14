@@ -55,8 +55,16 @@ mid = '1'
 final = '2'
 quiz = '0'
 grade_type_choices = [(quiz, 'امتحان کلاسی'),
-                       (mid, 'میانترم'), (final, 'پایان ترم'), ]
+                      (mid, 'میانترم'), (final, 'پایان ترم'), ]
 #############################
+# excused
+present = '0'
+excused_absent = '1'
+excused_choices = [
+    (present, 'حاضر'),
+    (excused_absent, 'غیبت موجه'),
+]
+############################
 # grade content
 very_low = '0'
 low = '1'
@@ -109,21 +117,28 @@ class AttendanceList(models.Model):
     day = models.CharField(max_length=5, blank=False, null=False)
     month = models.CharField(max_length=5, blank=False, null=False)
     year = models.CharField(max_length=5, blank=False, null=False)
+    excused = models.CharField(
+        max_length=1, choices=excused_choices, blank=False, null=False, default=present)
 
     class Meta:
-        unique_together = ('user_id','day','month','year')
+        unique_together = ('user_id', 'day', 'month', 'year')
 
 
 class GradeList(models.Model):
     id = models.AutoField(primary_key=True)
-    grade_owner_id = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='grade_owner')
-    teacher_id = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='teacher')
-    lesson_id = models.ForeignKey(Lessons,on_delete=models.CASCADE)
-    grade_type = models.CharField(max_length=2,choices=grade_type_choices,null=False,blank=False)
-    grade_count = models.CharField(max_length=2,choices=grade_count_choices,null=False,blank=False)
+    grade_owner_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='grade_owner')
+    teacher_id = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='teacher')
+    lesson_id = models.ForeignKey(Lessons, on_delete=models.CASCADE)
+    grade_type = models.CharField(
+        max_length=2, choices=grade_type_choices, null=False, blank=False)
+    grade_count = models.CharField(
+        max_length=2, choices=grade_count_choices, null=False, blank=False)
     day = models.CharField(max_length=5, blank=False, null=False)
     month = models.CharField(max_length=5, blank=False, null=False)
     year = models.CharField(max_length=5, blank=False, null=False)
 
     class Meta:
-        unique_together = ('grade_owner_id','day','month','year','lesson_id')
+        unique_together = ('grade_owner_id', 'day',
+                           'month', 'year', 'lesson_id')

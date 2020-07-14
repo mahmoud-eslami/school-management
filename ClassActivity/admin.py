@@ -15,7 +15,7 @@ class CustomWeeklySchedule(admin.ModelAdmin):
 
 @admin.register(AttendanceList)
 class CustomAttendanceList(admin.ModelAdmin):
-    list_display = ['id', 'user_id', 'day', 'month', 'year']
+    list_display = ['id', 'user_id', 'day', 'month', 'year','excused']
 
 
 @admin.register(GradeList)

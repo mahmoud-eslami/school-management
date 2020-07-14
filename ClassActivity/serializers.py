@@ -26,10 +26,10 @@ class GradeListSerializer(serializers.ModelSerializer):
 
 
 class AttendanceSerializer(serializers.ModelSerializer):
-
+    excused = serializers.CharField(max_length=1 ,allow_null=False,allow_blank=False)
     class Meta:
         model = AttendanceList
-        fields = ['user_id','day','month','year']
+        fields = ['user_id','day','month','year','excused']
 
     def create(self, validated_data):
         return AttendanceList.objects.create(**validated_data)
@@ -39,6 +39,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
         instance.day = validated_data.get('day', instance.day)
         instance.month = validated_data.get('month', instance.month)
         instance.year = validated_data.get('year', instance.year)
+        instance.excused = validated_data.get('excused' , instance.excused)
         instance.save()
         return instance
 
