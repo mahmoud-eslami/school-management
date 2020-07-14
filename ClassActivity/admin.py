@@ -13,8 +13,8 @@ class CustomWeeklySchedule(admin.ModelAdmin):
                     'second_bell', 'third_bell', 'forth_bell', 'fifth_bell']
 
 
-@admin.register(PresentAbsentList)
-class CustomPresentAbsentList(admin.ModelAdmin):
+@admin.register(AttendanceList)
+class CustomAttendanceList(admin.ModelAdmin):
     list_display = ['id', 'user_id', 'day', 'month', 'year']
 
 

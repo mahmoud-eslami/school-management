@@ -102,7 +102,7 @@ class WeeklySchedule(models.Model):
         unique_together = ('class_id', 'week_day')
 
 
-class PresentAbsentList(models.Model):
+class AttendanceList(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

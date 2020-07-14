@@ -25,14 +25,14 @@ class GradeListSerializer(serializers.ModelSerializer):
 
 
 
-class PresentAbsentSerializer(serializers.ModelSerializer):
+class AttendanceSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = PresentAbsentList
+        model = AttendanceList
         fields = ['user_id','day','month','year']
 
     def create(self, validated_data):
-        return PresentAbsentList.objects.create(**validated_data)
+        return AttendanceList.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.user_id = validated_data.get('user_id', instance.user_id)

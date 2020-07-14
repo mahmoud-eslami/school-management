@@ -52,7 +52,7 @@ class GradeListApi(APIView):
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class PersentAbsentApi(APIView):
+class AttendanceListApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     # get by date
@@ -61,10 +61,10 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year).exists():
-                temp_list = PresentAbsentList.objects.filter(
+            if AttendanceList.objects.filter(day=day, month=month, year=year).exists():
+                temp_list = AttendanceList.objects.filter(
                     day=day, month=month, year=year)
-                serializer = serializers.PresentAbsentSerializer(
+                serializer = serializers.AttendanceSerializer(
                     temp_list, many=True)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
@@ -76,7 +76,7 @@ class PersentAbsentApi(APIView):
 
     def post(self, request):
         try:
-            serializer = serializers.PresentAbsentSerializer(data=request.data)
+            serializer = serializers.AttendanceSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return CustomResponse(self, status_code=200, errors=[], message="دانش آموز با موفقیت به لیست اضاف شد .", data="", status=status.HTTP_200_OK)
@@ -94,10 +94,10 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
-                temp_row = PresentAbsentList.objects.get(
+            if AttendanceList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
+                temp_row = AttendanceList.objects.get(
                     day=day, month=month, year=year, user_id=user_id)
-                serializer = serializers.PresentAbsentSerializer(
+                serializer = serializers.AttendanceSerializer(
                     temp_row, request.data)
                 if serializer.is_valid():
                     serializer.save()
@@ -118,8 +118,8 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
-                temp_list = PresentAbsentList.objects.get(
+            if AttendanceList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
+                temp_list = AttendanceList.objects.get(
                     day=day, month=month, year=year, user_id=user_id).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="دانش آموز مورد نظر از لیست حضور حذف شد .", data="", status=status.HTTP_200_OK)
             else:
