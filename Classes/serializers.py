@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import *
 
+class CustomUsersOfClassSerializer(serializers.Serializer):
+    user_id = serializers.CharField(read_only=True)
 
 class ClassSerializer(serializers.ModelSerializer):
 
