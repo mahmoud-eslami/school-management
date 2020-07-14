@@ -21,7 +21,8 @@ class PersentAbsentApi(APIView):
             if PresentAbsentList.objects.filter(day=day, month=month, year=year).exists():
                 temp_list = PresentAbsentList.objects.filter(
                     day=day, month=month, year=year)
-                serializer = serializers.PresentAbsentSerializer(temp_list , many=True)
+                serializer = serializers.PresentAbsentSerializer(
+                    temp_list, many=True)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
                 return CustomResponse(self, status_code=406, errors=['دانش آموزی امروز مدرسه نیومده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -32,7 +33,13 @@ class PersentAbsentApi(APIView):
 
     def post(self, request):
         try:
-            pass
+            serializer = serializers.PresentAbsentSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return CustomResponse(self, status_code=200, errors=[], message="دانش آموز با موفقیت به لیست اضاف شد .", data="", status=status.HTTP_200_OK)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
@@ -40,7 +47,23 @@ class PersentAbsentApi(APIView):
 
     def put(self, request):
         try:
-            pass
+            user_id = request.GET['user_id']
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
+                temp_row = PresentAbsentList.objects.get(
+                    day=day, month=month, year=year, user_id=user_id)
+                serializer = serializers.PresentAbsentSerializer(
+                    temp_row, request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="اطلاعات با موفقیت اپدیت شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                return CustomResponse(self, status_code=406, errors=['دانش آموزش مورد نظر امروز مدرسه نیومده .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             trace_back = traceback.format_exc()
             message = str(e) + ' ' + str(trace_back)
