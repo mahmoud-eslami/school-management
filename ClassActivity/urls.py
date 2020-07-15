@@ -10,5 +10,6 @@ urlpatterns = [
     path('weeklySchedule/GetClassSchedule/',
          views.getClassWeeklySchedule.as_view(), name='get_class_weekly_schedule'),
     path('lessons/GetLessonsBySection/',views.getLessonsBySection.as_view(),name='get_lessons_section'),
-    path('presentAbsentList/Api/',views.PersentAbsentApi.as_view(),name='present_absent_list'),
+    path('AttendanceListApi/',views.AttendanceListApi.as_view(),name='present_absent_list'),
+    path('GradeList/Api/',views.GradeListApi.as_view(),name='grade_list_api'),
 ]

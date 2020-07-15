@@ -2,20 +2,44 @@ from rest_framework import serializers
 from .models import *
 
 
-class PresentAbsentSerializer(serializers.ModelSerializer):
+class GradeListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = PresentAbsentList
-        fields = ['user_id','day','month','year']
+        model = GradeList
+        fields = '__all__'
+
+    def create(self , validated_data):
+        return GradeList.objects.create(**validated_data)    
+
+    def update(self , instance, validated_data):
+        instance.grade_owner_id = validated_data.get('grade_owner_id',instance.grade_owner_id)
+        instance.teacher_id = validated_data.get('teacher_id', instance.teacher_id)
+        instance.lesson_id = validated_data.get('lesson_id', instance.lesson_id)
+        instance.grade_type = validated_data.get('grade_type', instance.grade_type)
+        instance.grade_count = validated_data.get('grade_count', instance.grade_count)
+        instance.day = validated_data.get('day', instance.day)
+        instance.month = validated_data.get('month', instance.month)
+        instance.year = validated_data.get('year', instance.year)
+        instance.save()
+        return instance
+
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    excused = serializers.CharField(max_length=1 ,allow_null=False,allow_blank=False)
+    class Meta:
+        model = AttendanceList
+        fields = ['user_id','day','month','year','excused']
 
     def create(self, validated_data):
-        return PresentAbsentList.objects.create(**validated_data)
+        return AttendanceList.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.user_id = validated_data.get('user_id', instance.user_id)
         instance.day = validated_data.get('day', instance.day)
         instance.month = validated_data.get('month', instance.month)
         instance.year = validated_data.get('year', instance.year)
+        instance.excused = validated_data.get('excused' , instance.excused)
         instance.save()
         return instance
 

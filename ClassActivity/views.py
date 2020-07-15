@@ -9,7 +9,85 @@ from rest_framework import status
 from . import serializers
 
 
-class PersentAbsentApi(APIView):
+class GradeListApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        try:
+            grade_owner = request.GET['grade_owner']
+            teacher_id = request.GET['teacher_id']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, teacher_id=teacher_id).exists():
+                temp_grade = GradeList.objects.filter(
+                    grade_owner_id=grade_owner, teacher_id=teacher_id)
+                serializer = serializers.GradeListSerializer(
+                    temp_grade, many=True)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors=['نمره ای یافت نشد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request):
+        try:
+            serializer = serializers.GradeListSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return CustomResponse(self, status_code=200, errors=[], message="نمره دانش آموز با موفقیت ثبت شد .", data="", status=status.HTTP_200_OK)
+            else:
+                message = serializer.errors
+                return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request):
+        try:
+            grade_owner = request.GET['grade_owner']
+            lesson_id = request.GET['lesson_id']
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).exists():
+                temp_grade = GradeList.objects.get(
+                    grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year)
+                serializer = serializers.GradeListSerializer(
+                    temp_grade, request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return CustomResponse(self, status_code=200, errors=[], message="نمره این درس با موفقیت بروزرسانی شد .", data="", status=status.HTTP_200_OK)
+                else:
+                    message = serializer.errors
+                    return CustomResponse(self, status_code=406, errors=message, message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                return CustomResponse(self, status_code=406, errors=['دانش آموز در این درس نمره ای ندارد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            grade_owner = request.GET['grade_owner']
+            lesson_id = request.GET['lesson_id']
+            day = request.GET['day']
+            month = request.GET['month']
+            year = request.GET['year']
+            if GradeList.objects.filter(grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year):
+                GradeList.objects.get(
+                    grade_owner_id=grade_owner, lesson_id=lesson_id, day=day, month=month, year=year).delete()
+                return CustomResponse(self, status_code=200, errors=[], message="نمره این درس دانش آموز حذف شد .", data="", status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors=['دانش آموز در این درس نمره ای ندارد .'], message="", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AttendanceListApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     # get by date
@@ -18,10 +96,10 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year).exists():
-                temp_list = PresentAbsentList.objects.filter(
+            if AttendanceList.objects.filter(day=day, month=month, year=year).exists():
+                temp_list = AttendanceList.objects.filter(
                     day=day, month=month, year=year)
-                serializer = serializers.PresentAbsentSerializer(
+                serializer = serializers.AttendanceSerializer(
                     temp_list, many=True)
                 return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
             else:
@@ -33,7 +111,7 @@ class PersentAbsentApi(APIView):
 
     def post(self, request):
         try:
-            serializer = serializers.PresentAbsentSerializer(data=request.data)
+            serializer = serializers.AttendanceSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return CustomResponse(self, status_code=200, errors=[], message="دانش آموز با موفقیت به لیست اضاف شد .", data="", status=status.HTTP_200_OK)
@@ -51,10 +129,10 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
-                temp_row = PresentAbsentList.objects.get(
+            if AttendanceList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
+                temp_row = AttendanceList.objects.get(
                     day=day, month=month, year=year, user_id=user_id)
-                serializer = serializers.PresentAbsentSerializer(
+                serializer = serializers.AttendanceSerializer(
                     temp_row, request.data)
                 if serializer.is_valid():
                     serializer.save()
@@ -75,8 +153,8 @@ class PersentAbsentApi(APIView):
             day = request.GET['day']
             month = request.GET['month']
             year = request.GET['year']
-            if PresentAbsentList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
-                temp_list = PresentAbsentList.objects.get(
+            if AttendanceList.objects.filter(day=day, month=month, year=year, user_id=user_id).exists():
+                temp_list = AttendanceList.objects.get(
                     day=day, month=month, year=year, user_id=user_id).delete()
                 return CustomResponse(self, status_code=200, errors=[], message="دانش آموز مورد نظر از لیست حضور حذف شد .", data="", status=status.HTTP_200_OK)
             else:

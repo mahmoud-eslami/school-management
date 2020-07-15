@@ -113,6 +113,22 @@ class userClassesApi(APIView):
             message = str(e) + ' ' + str(trace_back)
             return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class UsersSpecificClass(APIView):
+    permission_classes=(IsAuthenticated,)
+    def get(self , request):
+        try:
+            class_id = request.GET['class_id']
+            if UserClass.objects.filter(class_id = class_id).exists():
+                temp_users = UserClass.objects.filter(class_id = class_id)
+                serializer = serializers.CustomUsersOfClassSerializer(temp_users , many=True)
+                return CustomResponse(self, status_code=200, errors=[], message="", data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return CustomResponse(self, status_code=406, errors="", message="کاربری در کلاس وجود ندارد .", data="", status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e :
+            trace_back = traceback.format_exc()
+            message = str(e) + ' ' + str(trace_back)
+            return CustomResponse(self, status_code=500, errors=message, message="", data="", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class ClassesApi(APIView):
     permission_classes=(IsAuthenticated,)
