@@ -355,31 +355,8 @@ class registerUserApi(APIView):
             serializer = serializers.UserRegisterSerializer(data=request.data)
             if serializer.is_valid():
                 new_user = MyUser()
-
-                new_user.username = serializer.data.get('nationalCode')
-                new_user.first_name = serializer.data.get('first_name')
-                new_user.last_name = serializer.data.get('last_name')
-                new_user.email = serializer.data.get('email')
-                new_user.role = serializer.data.get('role')
-                new_user.set_password(serializer.data.get('nationalCode'))
-                new_user.save()
-
-                new_userDoc = userDoc(user_id=new_user.id, religion=serializer.data.get('religion'), userPhoto=serializer.data.get('userPhoto'),
-                                      userNationalCardPhoto=serializer.data.get('userNationalCardPhoto'), userIdCardPhoto=serializer.data.get('userIdCardPhoto'),
-                                      user_pNum=serializer.data.get('user_pNum'), home_pNum=serializer.data.get('home_pNum'), address=serializer.data.get('address'),
-                                      zipCode=serializer.data.get('zipCode'), personalCode=serializer.data.get('personalCode'), nationalCode=serializer.data.get('nationalCode'),
-                                      father_nationalCode=serializer.data.get('father_nationalCode'), father_name=serializer.data.get('father_name'), father_pNum=serializer.data.get('father_pNum'),
-                                      father_jobName=serializer.data.get('father_jobName'), father_jobAddress=serializer.data.get('father_jobAddress'), father_job_pNum=serializer.data.get('father_job_pNum'),
-                                      father_job_postalCode=serializer.data.get(
-                                          'father_job_postalCode'),
-                                      mother_nationalCode=serializer.data.get('mother_nationalCode'), mother_name=serializer.data.get('mother_name'), mother_pNum=serializer.data.get('mother_pNum'),
-                                      mother_job_postalCode=serializer.data.get(
-                                          'mother_job_postalCode'),
-                                      mother_jobName=serializer.data.get('mother_jobName'), mother_jobAddress=serializer.data.get('mother_jobAddress'), mother_job_pNum=serializer.data.get('mother_job_pNum'),
-                                      citizen_Num=serializer.data.get('citizen_Num'), date_of_birth=serializer.data.get('date_of_birth'), place_of_birth=serializer.data.get('place_of_birth'),
-                                      citizen=serializer.data.get('citizen'), gender=serializer.data.get('gender'), section=serializer.data.get('section'))
-                new_userDoc.save()
-
+                serializer.save()
+                # todo : user signal for create user doc at same time with custom user model
                 return CustomResponse(self, status_code=200, errors=[], message="",
                                       data={"user_id": str(new_user.id), "username": "کلمه کاربری برابر کد ملی", "password": "رمز عبور برابر کد ملی", }, status=status.HTTP_200_OK)
             else:
