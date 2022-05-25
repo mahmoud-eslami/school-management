@@ -12,7 +12,7 @@ mccabe==0.6.1
 mysqlclient==1.4.6
 Pillow==7.1.2
 pycodestyle==2.6.0
-PyJWT==1.7.1
+PyJWT==2.4.0
 pylint==2.5.3
 pytz==2020.1
 six==1.15.0
