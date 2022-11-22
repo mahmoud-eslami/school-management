@@ -10,7 +10,7 @@ isort==4.3.21
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
 mysqlclient==1.4.6
-Pillow==7.1.2
+Pillow==9.3.0
 pycodestyle==2.6.0
 PyJWT==2.4.0
 pylint==2.5.3
